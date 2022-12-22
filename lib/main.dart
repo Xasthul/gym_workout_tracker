@@ -3,6 +3,7 @@ import 'package:workout_tracker_prototype/project/app_pages/history.dart';
 import 'package:workout_tracker_prototype/project/app_pages/add_workout.dart';
 import 'package:workout_tracker_prototype/project/app_pages/progress.dart';
 import 'package:workout_tracker_prototype/project/app_pages/loading.dart';
+import 'package:animations/animations.dart';
 
 void main() {
   runApp(const MaterialApp(
@@ -56,7 +57,20 @@ class _HomeState extends State<Home> {
     );
     return Scaffold(
       bottomNavigationBar: bottomNavBar,
-      body: myBody[_currentTabIndex],
+      // body: myBody[_currentTabIndex],
+      body: Center(
+        child: PageTransitionSwitcher(
+          duration: const Duration(seconds: 1),
+          transitionBuilder: (child, primaryAnimation, secondaryAnimation) =>
+                SharedAxisTransition(
+                animation: primaryAnimation,
+                secondaryAnimation: secondaryAnimation,
+                transitionType: SharedAxisTransitionType.vertical,
+                child: child,
+              ),
+          child: myBody[_currentTabIndex],
+        ),
+      ),
     );
   }
 }
