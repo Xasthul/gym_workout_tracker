@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-
 class Progress extends StatefulWidget {
   const Progress({Key? key}) : super(key: key);
 

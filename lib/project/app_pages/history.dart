@@ -29,7 +29,6 @@ class _HistoryState extends State<History> {
       appBar: AppBar(
         backgroundColor: Colors.blue[400],
         title: const Text("Your Workouts", style: TextStyle(fontSize: 21)),
-
         //centerTitle: true,
         actions: <Widget>[
           IconButton(

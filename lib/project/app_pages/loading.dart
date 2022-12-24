@@ -5,6 +5,11 @@ class Loading extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
-  }
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.blue[400],
+        title: const Text("Loading", style: TextStyle(fontSize: 21)),
+        //centerTitle: true,
+      ),
+    );  }
 }
