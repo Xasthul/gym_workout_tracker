@@ -9,7 +9,7 @@ class AddWorkout extends StatefulWidget {
 }
 
 class _AddWorkoutState extends State<AddWorkout> {
-  List<Widget> _exercises = [];
+  final List<Widget> _exercises = [];
 
   @override
   Widget build(BuildContext context) {
