@@ -6,9 +6,7 @@ import 'package:workout_tracker_prototype/project/app_pages/loading.dart';
 import 'package:animations/animations.dart';
 
 void main() {
-  runApp(const MaterialApp(
-    home: Home()
-  ));
+  runApp(const MaterialApp(home: Home()));
 }
 
 class Home extends StatefulWidget {
@@ -35,9 +33,12 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     List<BottomNavigationBarItem> bottomNavBarItems = <BottomNavigationBarItem>[
-      const BottomNavigationBarItem(icon: Icon(Icons.add_outlined), label: 'Add Workout'),
-      const BottomNavigationBarItem(icon: Icon(Icons.history_edu_outlined), label: 'History'),
-      const BottomNavigationBarItem(icon: Icon(Icons.show_chart_outlined), label: 'Progress'),
+      const BottomNavigationBarItem(
+          icon: Icon(Icons.add_outlined), label: 'Add Workout'),
+      const BottomNavigationBarItem(
+          icon: Icon(Icons.history_edu_outlined), label: 'History'),
+      const BottomNavigationBarItem(
+          icon: Icon(Icons.show_chart_outlined), label: 'Progress'),
     ];
 
     Widget bottomNavBar = BottomNavigationBar(
@@ -60,14 +61,14 @@ class _HomeState extends State<Home> {
       // body: myBody[_currentTabIndex],
       body: Center(
         child: PageTransitionSwitcher(
-          duration: const Duration(seconds: 1),
+          duration: const Duration(milliseconds: 500),
           transitionBuilder: (child, primaryAnimation, secondaryAnimation) =>
-                SharedAxisTransition(
-                animation: primaryAnimation,
-                secondaryAnimation: secondaryAnimation,
-                transitionType: SharedAxisTransitionType.vertical,
-                child: child,
-              ),
+              SharedAxisTransition(
+            animation: primaryAnimation,
+            secondaryAnimation: secondaryAnimation,
+            transitionType: SharedAxisTransitionType.vertical,
+            child: child,
+          ),
           child: myBody[_currentTabIndex],
         ),
       ),

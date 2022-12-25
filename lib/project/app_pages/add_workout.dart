@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:workout_tracker_prototype/project/app_pages/exercises.dart';
 
-
 class AddWorkout extends StatefulWidget {
   const AddWorkout({Key? key}) : super(key: key);
 
@@ -14,17 +13,15 @@ class _AddWorkoutState extends State<AddWorkout> {
 
   @override
   Widget build(BuildContext context) {
-
-    Widget popupMenuButton =
-      PopupMenuButton(
-        itemBuilder: (context) => [
-          const PopupMenuItem(
-            value: 1,
-            child: Text("Remove exercise"),
-          )
-        ],
-        offset: const Offset(0, 55),
-      );
+    Widget popupMenuButton = PopupMenuButton(
+      itemBuilder: (context) => [
+        const PopupMenuItem(
+          value: 1,
+          child: Text("Remove exercise"),
+        )
+      ],
+      offset: const Offset(0, 55),
+    );
 
     return Scaffold(
       appBar: AppBar(
@@ -48,7 +45,7 @@ class _AddWorkoutState extends State<AddWorkout> {
           setState(() {
             _exercises.add(const ExerciseCard());
           });
-          },
+        },
         tooltip: "Add exercise",
         child: const Icon(Icons.add),
       ),
@@ -67,107 +64,100 @@ class _ExerciseCardState extends State<ExerciseCard> {
   @override
   Widget build(BuildContext context) {
     return Card(
-      color: Colors.grey,
+      color: Colors.amber[200],
       elevation: 3,
-      margin: const EdgeInsets.fromLTRB(25.0, 12.5, 25.0, 12.5),
+      margin: const EdgeInsets.symmetric(vertical: 12.5, horizontal: 25.0),
       shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(
-              Radius.circular(20.0)
-          )
-      ),
+          borderRadius: BorderRadius.all(Radius.circular(20.0))),
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(32.0, 0.0, 32.0, 0.0),
+        padding: const EdgeInsets.symmetric(vertical: 0.0, horizontal: 32.0),
         child: SizedBox(
           height: 130,
           child: Column(
             children: [
               GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                        context, 
-                        MaterialPageRoute(
-                            builder: (context) => Exercises(),
-                        ));
-                  },
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => Exercises(),
+                      ));
+                },
                 child: Padding(
-                    padding: EdgeInsets.fromLTRB(5, 15, 0 , 0),
-                    child: Row(
-                      children: const [
-                        Expanded(
-                            child: Text("Exercise",
-                              style: TextStyle(fontSize: 20)
-                            )
-                        ),
-                        Icon(
-                            Icons.arrow_forward_ios_outlined,
-                            size: 18,
-                        )
-                      ],
-                    ),
+                  padding: const EdgeInsets.fromLTRB(5, 15, 0, 0),
+                  child: Row(
+                    children: const [
+                      Expanded(
+                          child:
+                              Text("Exercise", style: TextStyle(fontSize: 20))),
+                      Icon(
+                        Icons.arrow_forward_ios_outlined,
+                        size: 18,
+                      )
+                    ],
+                  ),
                 ),
-
               ),
               const Divider(
                 color: Colors.black,
               ),
               const SizedBox(height: 10),
               Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: const [
-                  Expanded(
+                  SizedBox(
+                    width: 80,
                     child: TextField(
                       keyboardType: TextInputType.number,
-                      style: TextStyle(height: 0.5),
+                      style: TextStyle(fontSize: 18),
+                      textAlign: TextAlign.center,
                       decoration: InputDecoration(
+                          contentPadding: EdgeInsets.all(10),
+                          isDense: true,
                           labelText: "Weight",
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(10.0))
-                        )
-                      ),
+                          border: OutlineInputBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10.0)))),
                     ),
                   ),
                   SizedBox(width: 10),
-                  Text("kg"),
+                  Text("kg", style: TextStyle(fontSize: 18)),
                   SizedBox(width: 10),
-                  Expanded(
+                  SizedBox(
+                    width: 65,
                     child: TextField(
                       keyboardType: TextInputType.number,
-                      style: TextStyle(
-                          fontSize: 18
-                      ),
+                      style: TextStyle(fontSize: 18),
+                      textAlign: TextAlign.center,
                       decoration: InputDecoration(
-                          contentPadding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+                          contentPadding: EdgeInsets.all(10),
                           isDense: true,
                           labelText: "Reps",
                           border: OutlineInputBorder(
-                              borderRadius: BorderRadius.all(Radius.circular(10.0))
-                          )
-                      ),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10.0)))),
                     ),
                   ),
-                  SizedBox(width: 10),
-                  Text("x"),
-                  SizedBox(width: 10),
-                  Expanded(
+                  SizedBox(width: 5),
+                  Text("X"),
+                  SizedBox(width: 5),
+                  SizedBox(
+                    width: 60,
                     child: TextField(
                       keyboardType: TextInputType.number,
-                      style: TextStyle(height: 0.5),
+                      style: TextStyle(fontSize: 18),
+                      textAlign: TextAlign.center,
                       decoration: InputDecoration(
+                          contentPadding: EdgeInsets.all(10),
+                          isDense: true,
                           labelText: "Sets",
                           border: OutlineInputBorder(
-                              borderRadius: BorderRadius.all(Radius.circular(10.0))
-                          )
-                      ),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10.0)))),
                     ),
                   ),
                 ],
               ),
-              const SizedBox(height: 10),
-              Row(
-                // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: const [
-
-                ],
-              )
             ],
           ),
         ),

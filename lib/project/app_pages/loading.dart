@@ -9,7 +9,6 @@ class Loading extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Colors.blue[400],
         title: const Text("Loading", style: TextStyle(fontSize: 21)),
-        //centerTitle: true,
       ),
     );  }
 }

@@ -14,7 +14,6 @@ class _ProgressState extends State<Progress> {
       appBar: AppBar(
         backgroundColor: Colors.blue[400],
         title: const Text("Your Progress", style: TextStyle(fontSize: 21)),
-        //centerTitle: true,
       ),
     );
   }
