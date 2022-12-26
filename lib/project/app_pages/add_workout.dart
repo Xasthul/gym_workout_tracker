@@ -61,6 +61,8 @@ class ExerciseCard extends StatefulWidget {
 }
 
 class _ExerciseCardState extends State<ExerciseCard> {
+  String? exercise;
+
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -76,21 +78,24 @@ class _ExerciseCardState extends State<ExerciseCard> {
           child: Column(
             children: [
               GestureDetector(
-                onTap: () {
-                  Navigator.push(
+                onTap: () async {
+                  final chosenExercise = await Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => Exercises(),
+                        builder: (context) => const Exercises(),
                       ));
+                  setState(() {
+                    exercise = chosenExercise;
+                  });
                 },
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(5, 15, 0, 0),
                   child: Row(
-                    children: const [
+                    children: [
                       Expanded(
-                          child:
-                              Text("Exercise", style: TextStyle(fontSize: 20))),
-                      Icon(
+                          child: Text(exercise ?? "Exercise",
+                              style: const TextStyle(fontSize: 20))),
+                      const Icon(
                         Icons.arrow_forward_ios_outlined,
                         size: 18,
                       )

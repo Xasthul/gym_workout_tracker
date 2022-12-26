@@ -28,43 +28,45 @@ class _ExercisesState extends State<Exercises> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.blue[400],
-        title: const Text("Exercises", style: TextStyle(fontSize: 21)),
-        actions: [
-          IconButton(
-            tooltip: "Search",
-            onPressed: () async {
-              final String? selectedExercise = await showSearch<String?>(
-                  context: context, delegate: _delegate);
-              if (selectedExercise != null && _exercises.contains(selectedExercise)) {
-                // ScaffoldMessenger.of(context).showSnackBar(
-                //   SnackBar(
-                //     content: Text('You have selected the word: $selectedExercise'),
-                //   ),
-                // );
-              }
-            },
-            icon: const Icon(Icons.search),
-          ),
-          IconButton(
-            tooltip: "Add new exercise",
-            onPressed: () async {
-              final newExerciseName = await openDialog();
-              if (newExerciseName == null || newExerciseName.isEmpty) return;
-              setState(() {
-                _exercises.add(newExerciseName);
-              });
-            },
-            icon: const Icon(Icons.add),
-          ),
-        ],
-      ),
-      body: ListView.builder(
-        itemCount: _exercises.length,
-        itemBuilder: (context, index) => Text(_exercises[index]),
-      ),
-    );
+        appBar: AppBar(
+          backgroundColor: Colors.blue[400],
+          title: const Text("Exercises", style: TextStyle(fontSize: 21)),
+          actions: [
+            IconButton(
+              tooltip: "Search",
+              onPressed: () async {
+                final String? selectedExercise = await showSearch<String?>(
+                    context: context, delegate: _delegate);
+                if (selectedExercise != null &&
+                    _exercises.contains(selectedExercise)) {
+                  if (!mounted) return;
+                  Navigator.pop(context, selectedExercise);
+                }
+              },
+              icon: const Icon(Icons.search),
+            ),
+            IconButton(
+              tooltip: "Add new exercise",
+              onPressed: () async {
+                final newExerciseName = await openDialog();
+                if (newExerciseName == null || newExerciseName.isEmpty) return;
+                setState(() {
+                  _exercises.add(newExerciseName);
+                });
+              },
+              icon: const Icon(Icons.add),
+            ),
+          ],
+        ),
+        body: ListView.builder(
+            itemCount: _exercises.length,
+            itemBuilder: (context, index) {
+              return Card(
+                elevation: 1,
+                color: Colors.amber[200],
+                child: ListTile(title: Text(_exercises[index])),
+              );
+            }));
   }
 
   Future<String?> openDialog() => showDialog<String>(
