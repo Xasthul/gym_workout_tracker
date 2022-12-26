@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 
 class Exercises extends StatefulWidget {
   const Exercises({Key? key}) : super(key: key);
@@ -58,16 +59,41 @@ class _ExercisesState extends State<Exercises> {
             ),
           ],
         ),
-        body: ListView.builder(
-            itemCount: _exercises.length,
-            itemBuilder: (context, index) {
-              return Card(
-                elevation: 1,
-                color: Colors.amber[200],
-                child: ListTile(title: Text(_exercises[index])),
-              );
-            }));
+        body: SlidableAutoCloseBehavior(
+          closeWhenOpened: true,
+          child: ListView.builder(
+              itemCount: _exercises.length,
+              itemBuilder: (context, index) {
+                return Card(
+                    elevation: 1,
+                    color: Colors.amber[200],
+                    child: Slidable(
+                      endActionPane: ActionPane(
+                        motion: const DrawerMotion(),
+                        children: [
+                          SlidableAction(
+                            onPressed: doNothing,
+                            backgroundColor: const Color(0xFF21B7CA),
+                            foregroundColor: Colors.white,
+                            icon: Icons.edit,
+                            label: 'Rename',
+                          ),
+                          SlidableAction(
+                            onPressed: doNothing,
+                            backgroundColor: const Color(0xFFFE4A49),
+                            foregroundColor: Colors.white,
+                            icon: Icons.delete,
+                            label: 'Delete',
+                          ),
+                        ],
+                      ),
+                      child: ListTile(title: Text(_exercises[index])),
+                    ));
+              }),
+        ));
   }
+
+  void doNothing(BuildContext context) {}
 
   Future<String?> openDialog() => showDialog<String>(
       context: context,
