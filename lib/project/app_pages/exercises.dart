@@ -64,62 +64,90 @@ class _ExercisesState extends State<Exercises> {
           child: ListView.builder(
               itemCount: _exercises.length,
               itemBuilder: (context, index) {
-                return Card(
-                    elevation: 1,
-                    color: Colors.amber[200],
-                    child: Slidable(
-                      endActionPane: ActionPane(
-                        motion: const DrawerMotion(),
-                        children: [
-                          SlidableAction(
-                            onPressed: doNothing,
-                            backgroundColor: const Color(0xFF21B7CA),
-                            foregroundColor: Colors.white,
-                            icon: Icons.edit,
-                            label: 'Rename',
-                          ),
-                          SlidableAction(
-                            onPressed: doNothing,
-                            backgroundColor: const Color(0xFFFE4A49),
-                            foregroundColor: Colors.white,
-                            icon: Icons.delete,
-                            label: 'Delete',
-                          ),
-                        ],
-                      ),
-                      child: ListTile(title: Text(_exercises[index])),
-                    ));
+                return GestureDetector(
+                  onTap: () => Navigator.pop(context, _exercises[index]),
+                  child: Card(
+                      elevation: 1,
+                      color: Colors.amber[200],
+                      child: Slidable(
+                        endActionPane: ActionPane(
+                          motion: const DrawerMotion(),
+                          children: [
+                            SlidableAction(
+                              onPressed: doNothing,
+                              backgroundColor: const Color(0xFF21B7CA),
+                              foregroundColor: Colors.white,
+                              icon: Icons.edit,
+                              label: 'Rename',
+                            ),
+                            SlidableAction(
+                              onPressed: doNothing,
+                              backgroundColor: const Color(0xFFFE4A49),
+                              foregroundColor: Colors.white,
+                              icon: Icons.delete,
+                              label: 'Delete',
+                            ),
+                          ],
+                        ),
+                        child: ListTile(title: Text(_exercises[index])),
+                      )),
+                );
               }),
         ));
   }
 
   void doNothing(BuildContext context) {}
 
+  // Dialog to add exercise
   Future<String?> openDialog() => showDialog<String>(
       context: context,
-      builder: (context) => AlertDialog(
-            title: const Text("New exercise"),
-            content: TextField(
-              autofocus: true,
-              controller: _controller,
-              decoration: const InputDecoration(hintText: "Name of exercise"),
-              onSubmitted: (_) => submitDialog(),
+      builder: (context) => Dialog(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20.0)),
+            child: SizedBox(
+              height: 200,
+              child: Padding(
+                padding: const EdgeInsets.all(24.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text("New exercise", style: TextStyle(fontSize: 18)),
+                    const SizedBox(height: 25),
+                    TextField(
+                      autofocus: true,
+                      controller: _controller,
+                      decoration: const InputDecoration(
+                          hintText: "Name of exercise",
+                          contentPadding: EdgeInsets.all(10),
+                          isDense: true,
+                          border: OutlineInputBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10.0)))),
+                      onSubmitted: (_) => submitDialog(),
+                    ),
+                    const SizedBox(height: 15),
+                    SizedBox(
+                        width: 320.0,
+                        child: TextButton(
+                          style: TextButton.styleFrom(
+                              backgroundColor: Colors.amber[300]),
+                          onPressed: submitDialog,
+                          child: const Text("Add",
+                              style: TextStyle(color: Colors.black)),
+                        ))
+                  ],
+                ),
+              ),
             ),
-            actions: [
-              TextButton(
-                onPressed: submitDialog,
-                child: const Text("Add"),
-              )
-            ],
           ));
 
   void submitDialog() {
     Navigator.of(context).pop(_controller.text);
-
     _controller.clear();
   }
 }
 
+// For searching
 class _MySearchDelegate extends SearchDelegate<String?> {
   final List<String> _exercises;
 
