@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class Exercises extends StatefulWidget {
   const Exercises({Key? key}) : super(key: key);
@@ -31,7 +32,7 @@ class _ExercisesState extends State<Exercises> {
     return Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.blue[400],
-          title: const Text("Exercises", style: TextStyle(fontSize: 21)),
+          title: Text("Exercises", style: TextStyle(fontSize: 21.sp)),
           actions: [
             IconButton(
               tooltip: "Search",
@@ -75,6 +76,7 @@ class _ExercisesState extends State<Exercises> {
                           children: [
                             SlidableAction(
                               onPressed: doNothing,
+                              flex: 7,
                               backgroundColor: const Color(0xFF21B7CA),
                               foregroundColor: Colors.white,
                               icon: Icons.edit,
@@ -82,8 +84,12 @@ class _ExercisesState extends State<Exercises> {
                             ),
                             SlidableAction(
                               onPressed: doNothing,
+                              flex: 6,
                               backgroundColor: const Color(0xFFFE4A49),
                               foregroundColor: Colors.white,
+                              borderRadius: BorderRadius.only(
+                                  topRight: Radius.circular(5.r),
+                                  bottomRight: Radius.circular(5.r)),
                               icon: Icons.delete,
                               label: 'Delete',
                             ),
@@ -103,41 +109,41 @@ class _ExercisesState extends State<Exercises> {
       context: context,
       builder: (context) => Dialog(
             shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20.0)),
-            child: SizedBox(
-              height: 200,
-              child: Padding(
-                padding: const EdgeInsets.all(24.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text("New exercise", style: TextStyle(fontSize: 18)),
-                    const SizedBox(height: 25),
-                    TextField(
-                      autofocus: true,
-                      controller: _controller,
-                      decoration: const InputDecoration(
-                          hintText: "Name of exercise",
-                          contentPadding: EdgeInsets.all(10),
-                          isDense: true,
-                          border: OutlineInputBorder(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(10.0)))),
-                      onSubmitted: (_) => submitDialog(),
-                    ),
-                    const SizedBox(height: 15),
-                    SizedBox(
-                        width: 320.0,
-                        child: TextButton(
-                          style: TextButton.styleFrom(
-                              backgroundColor: Colors.amber[300]),
-                          onPressed: submitDialog,
-                          child: const Text("Add",
-                              style: TextStyle(color: Colors.black)),
-                        ))
-                  ],
+                borderRadius: BorderRadius.circular(20.r)),
+            child: Wrap(
+              children: [
+                Padding(
+                  padding: EdgeInsets.all(24.w),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Text("New exercise", style: TextStyle(fontSize: 18.sp)),
+                      Padding(
+                        padding: EdgeInsets.only(top: 25.h, bottom: 15.h),
+                        child: TextField(
+                          autofocus: true,
+                          controller: _controller,
+                          decoration: InputDecoration(
+                              hintText: "Name of exercise",
+                              contentPadding: EdgeInsets.all(10.w),
+                              isDense: true,
+                              border: OutlineInputBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(10.r)))),
+                          onSubmitted: (_) => submitDialog(),
+                        ),
+                      ),
+                      TextButton(
+                        style: TextButton.styleFrom(
+                            backgroundColor: Colors.amber[300]),
+                        onPressed: submitDialog,
+                        child: const Text("Add",
+                            style: TextStyle(color: Colors.black)),
+                      )
+                    ],
+                  ),
                 ),
-              ),
+              ],
             ),
           ));
 

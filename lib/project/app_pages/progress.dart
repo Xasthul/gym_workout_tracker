@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 
 class Progress extends StatefulWidget {
   const Progress({Key? key}) : super(key: key);
@@ -13,7 +15,7 @@ class _ProgressState extends State<Progress> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.blue[400],
-        title: const Text("Your Progress", style: TextStyle(fontSize: 21)),
+        title: Text("Your Progress", style: TextStyle(fontSize: 21.sp)),
       ),
     );
   }

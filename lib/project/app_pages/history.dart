@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 //   Map<String, dynamic> workouts =
 //   {"21.12.22" : {
@@ -22,13 +23,12 @@ class History extends StatefulWidget {
 }
 
 class _HistoryState extends State<History> {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.blue[400],
-        title: const Text("Your Workouts", style: TextStyle(fontSize: 21)),
+        title: Text("Your Workouts", style: TextStyle(fontSize: 21.sp)),
         //centerTitle: true,
         actions: <Widget>[
           IconButton(
@@ -44,7 +44,7 @@ class _HistoryState extends State<History> {
         ],
       ),
       body: WorkoutContainer(),
-      );
+    );
   }
 }
 
@@ -56,7 +56,6 @@ class WorkoutContainer extends StatefulWidget {
 }
 
 class _WorkoutContainerState extends State<WorkoutContainer> {
-
   @override
   Widget build(BuildContext context) {
     return Container();

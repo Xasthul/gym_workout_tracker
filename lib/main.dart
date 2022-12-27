@@ -4,9 +4,25 @@ import 'package:workout_tracker_prototype/project/app_pages/add_workout.dart';
 import 'package:workout_tracker_prototype/project/app_pages/progress.dart';
 import 'package:workout_tracker_prototype/project/app_pages/loading.dart';
 import 'package:animations/animations.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 void main() {
-  runApp(const MaterialApp(home: Home()));
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return ScreenUtilInit(
+      designSize: const Size(393.0, 783.0), // 393, 808 | 393, 783
+      builder: (BuildContext context, child) => const MaterialApp(
+          title: "Gym Workout Tracker",
+          debugShowCheckedModeBanner: false,
+          home: Home()),
+    );
+  }
 }
 
 class Home extends StatefulWidget {
@@ -19,9 +35,9 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   int _currentTabIndex = 1;
   List<Widget> myBody = [
-    AddWorkout(),
-    History(),
-    Progress(),
+    const AddWorkout(),
+    const History(),
+    const Progress(),
   ];
 
   // @override
@@ -42,9 +58,9 @@ class _HomeState extends State<Home> {
     ];
 
     Widget bottomNavBar = BottomNavigationBar(
-      iconSize: 27,
-      selectedFontSize: 16,
-      unselectedFontSize: 14,
+      iconSize: 27.sp,
+      selectedFontSize: 16.sp,
+      unselectedFontSize: 14.sp,
       selectedItemColor: Colors.amber[800],
       unselectedItemColor: Colors.black87,
       items: bottomNavBarItems,
