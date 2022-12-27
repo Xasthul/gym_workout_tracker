@@ -63,40 +63,44 @@ class _ExercisesState extends State<Exercises> {
         body: SlidableAutoCloseBehavior(
           closeWhenOpened: true,
           child: ListView.builder(
+            padding: EdgeInsets.symmetric(vertical: 10.r),
               itemCount: _exercises.length,
               itemBuilder: (context, index) {
                 return GestureDetector(
                   onTap: () => Navigator.pop(context, _exercises[index]),
-                  child: Card(
-                      elevation: 1,
-                      color: Colors.amber[200],
-                      child: Slidable(
-                        endActionPane: ActionPane(
-                          motion: const DrawerMotion(),
-                          children: [
-                            SlidableAction(
-                              onPressed: doNothing,
-                              flex: 7,
-                              backgroundColor: const Color(0xFF21B7CA),
-                              foregroundColor: Colors.white,
-                              icon: Icons.edit,
-                              label: 'Rename',
-                            ),
-                            SlidableAction(
-                              onPressed: doNothing,
-                              flex: 6,
-                              backgroundColor: const Color(0xFFFE4A49),
-                              foregroundColor: Colors.white,
-                              borderRadius: BorderRadius.only(
-                                  topRight: Radius.circular(5.r),
-                                  bottomRight: Radius.circular(5.r)),
-                              icon: Icons.delete,
-                              label: 'Delete',
-                            ),
-                          ],
-                        ),
-                        child: ListTile(title: Text(_exercises[index])),
-                      )),
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 5.r),
+                    child: Card(
+                        elevation: 1,
+                        color: Colors.amber[200],
+                        child: Slidable(
+                          endActionPane: ActionPane(
+                            motion: const DrawerMotion(),
+                            children: [
+                              SlidableAction(
+                                onPressed: doNothing,
+                                flex: 7,
+                                backgroundColor: const Color(0xFF21B7CA),
+                                foregroundColor: Colors.white,
+                                icon: Icons.edit,
+                                label: 'Rename',
+                              ),
+                              SlidableAction(
+                                onPressed: doNothing,
+                                flex: 6,
+                                backgroundColor: const Color(0xFFFE4A49),
+                                foregroundColor: Colors.white,
+                                borderRadius: BorderRadius.only(
+                                    topRight: Radius.circular(5.r),
+                                    bottomRight: Radius.circular(5.r)),
+                                icon: Icons.delete,
+                                label: 'Delete',
+                              ),
+                            ],
+                          ),
+                          child: ListTile(title: Text(_exercises[index])),
+                        )),
+                  ),
                 );
               }),
         ));

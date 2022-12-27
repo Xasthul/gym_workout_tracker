@@ -78,11 +78,12 @@ class _ExerciseCardState extends State<ExerciseCard> {
           children: [
             GestureDetector(
               onTap: () async {
-                final chosenExercise = await Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const Exercises(),
-                    ));
+                // final chosenExercise = await Navigator.push(
+                //     context,
+                //     MaterialPageRoute(
+                //       builder: (context) => const Exercises(),
+                //     ));
+                final chosenExercise = await Navigator.of(context).push(_routeToExercises());
                 setState(() {
                   exercise = chosenExercise;
                 });
@@ -169,6 +170,24 @@ class _ExerciseCardState extends State<ExerciseCard> {
           ],
         ),
       ),
+    );
+  }
+
+  Route _routeToExercises() {
+    return PageRouteBuilder(
+      pageBuilder: (context, animation, secondaryAnimation) => const Exercises(),
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        const begin = Offset(1.0, 0.0);
+        const end = Offset.zero;
+        const curve = Curves.ease;
+
+        var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+
+        return SlideTransition(
+          position: animation.drive(tween),
+          child: child,
+        );
+      },
     );
   }
 }
