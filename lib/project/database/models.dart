@@ -27,15 +27,15 @@ class Workout {
 
   Workout(this.dateTimeOfWorkout);
 
-  String? get dbExercises =>
-      exercises == null ? null : json.encode(exercises);
+  String? get dbExercises => exercises == null ? null : json.encode(exercises);
 
   set dbExercises(String? value) {
     if (value == null) {
       exercises = null;
     } else {
-      exercises = Map.from(
-          json.decode(value).map((k, v) => MapEntry(k as String, v as dynamic)));
+      exercises = Map.from(json
+          .decode(value)
+          .map((k, v) => MapEntry(k as String, v as dynamic)));
     }
   }
 }

@@ -11,7 +11,13 @@ class ExercisesAdd extends StatefulWidget {
 }
 
 class _ExercisesAddState extends State<ExercisesAdd> {
-  final TextEditingController _controller = TextEditingController();
+  late TextEditingController _controller;
+
+  @override
+  void initState() {
+    _controller = TextEditingController();
+    super.initState();
+  }
 
   @override
   void dispose() {

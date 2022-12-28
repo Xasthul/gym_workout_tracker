@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:workout_tracker_prototype/project/classes/exercises_list_view.dart';
 import 'package:workout_tracker_prototype/project/classes/exercises_add.dart';
+import 'package:workout_tracker_prototype/project/classes/exercises_search.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:workout_tracker_prototype/main.dart';
+import 'package:workout_tracker_prototype/project/database/models.dart';
 
 class Exercises extends StatefulWidget {
   const Exercises({Key? key}) : super(key: key);
@@ -11,139 +14,102 @@ class Exercises extends StatefulWidget {
 }
 
 class _ExercisesState extends State<Exercises> {
-  final List<String> _exercises = [];
-  late _MySearchDelegate _delegate;
-
-  @override
-  void initState() {
-    super.initState();
-    _delegate = _MySearchDelegate(_exercises);
+  ExerciseCard Function(BuildContext, int) _itemBuilder(
+      List<Exercise> exercises) {
+    return (BuildContext context, int index) =>
+        ExerciseCard(exercise: exercises[index]);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.blue[400],
-          title: Text("Exercises", style: TextStyle(fontSize: 21.sp)),
-          actions: [
-            IconButton(
-              tooltip: "Search",
-              onPressed: () async {
-                final String? selectedExercise = await showSearch<String?>(
-                    context: context, delegate: _delegate);
-                if (selectedExercise != null &&
-                    _exercises.contains(selectedExercise)) {
-                  if (!mounted) return;
-                  Navigator.pop(context, selectedExercise);
-                }
-              },
-              icon: const Icon(Icons.search),
-            ),
-            const ExercisesAdd(),
-          ],
-        ),
-        body: const ExerciseList(),
-    );
-  }
-}
-
-// For searching
-class _MySearchDelegate extends SearchDelegate<String?> {
-  final List<String> _exercises;
-
-  _MySearchDelegate(List<String> exercises)
-      : _exercises = exercises,
-        super();
-
-  @override
-  Widget buildLeading(BuildContext context) {
-    return IconButton(
-      tooltip: 'Back',
-      icon: AnimatedIcon(
-        icon: AnimatedIcons.menu_arrow,
-        progress: transitionAnimation,
+      appBar: AppBar(
+        backgroundColor: Colors.blue[400],
+        title: Text("Exercises", style: TextStyle(fontSize: 21.sp)),
+        actions: const [
+          ExercisesSearch(),
+          ExercisesAdd(),
+        ],
       ),
-      onPressed: () {
-        close(context, null);
-      },
+      body: StreamBuilder<List<Exercise>>(
+        stream: objectbox.getExercises(),
+        builder: (context, snapshot) {
+          if (snapshot.data?.isNotEmpty ?? false) {
+            return SlidableAutoCloseBehavior(
+                closeWhenOpened: true,
+                child: ListView.builder(
+                    padding: EdgeInsets.symmetric(vertical: 10.r),
+                    itemCount: snapshot.hasData ? snapshot.data!.length : 0,
+                    itemBuilder: _itemBuilder(snapshot.data ?? [])));
+          } else {
+            return const Center(child: Text("List is empty."));
+          }
+        },
+      ),
     );
-  }
-
-  @override
-  Widget buildResults(BuildContext context) {
-    return const SizedBox();
-  }
-
-  @override
-  Widget buildSuggestions(BuildContext context) {
-    final Iterable<String> suggestions =
-        _exercises.where((word) => word.startsWith(query));
-
-    return _SuggestionList(
-      query: query,
-      suggestions: suggestions.toList(),
-      onSelected: (String suggestion) {
-        query = suggestion;
-        showResults(context);
-      },
-    );
-  }
-
-  @override
-  List<Widget> buildActions(BuildContext context) {
-    return <Widget>[
-      IconButton(
-          onPressed: () {
-            query = '';
-            // showSuggestions(context);
-          },
-          icon: const Icon(Icons.clear)),
-    ];
-  }
-
-  @override
-  void showResults(BuildContext context) {
-    close(context, query);
   }
 }
 
-class _SuggestionList extends StatelessWidget {
-  const _SuggestionList(
-      {required this.suggestions,
-      required this.query,
-      required this.onSelected});
+class ExerciseCard extends StatefulWidget {
+  final Exercise exercise;
 
-  final List<String> suggestions;
-  final String query;
-  final ValueChanged<String> onSelected;
+  const ExerciseCard({Key? key, required this.exercise}) : super(key: key);
 
+  @override
+  State<ExerciseCard> createState() => _ExerciseCardState();
+}
+
+class _ExerciseCardState extends State<ExerciseCard> {
   @override
   Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme.subtitle1;
-    return ListView.builder(
-      itemCount: suggestions.length,
-      itemBuilder: (BuildContext context, int i) {
-        final String suggestion = suggestions[i];
-        return ListTile(
-          // Highlight the substring that matched the query.
-          title: RichText(
-            text: TextSpan(
-              text: suggestion.substring(0, query.length),
-              style: textTheme?.copyWith(fontWeight: FontWeight.bold),
-              children: <TextSpan>[
-                TextSpan(
-                  text: suggestion.substring(query.length),
-                  style: textTheme,
-                ),
-              ],
-            ),
-          ),
-          onTap: () {
-            onSelected(suggestion);
-          },
-        );
-      },
+    return GestureDetector(
+      onTap: () => Navigator.pop(context, widget.exercise.name),
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 5.r),
+        child: Card(
+            elevation: 2,
+            color: Colors.amber[200],
+            child: Slidable(
+              endActionPane: ActionPane(
+                motion: const DrawerMotion(),
+                children: [
+                  SlidableAction(
+                    onPressed: (item) =>
+                        renameExercise(context, widget.exercise),
+                    flex: 7,
+                    backgroundColor: const Color(0xFF21B7CA),
+                    foregroundColor: Colors.white,
+                    icon: Icons.edit,
+                    label: 'Rename',
+                  ),
+                  SlidableAction(
+                    onPressed: (item) =>
+                        deleteExercise(context, widget.exercise),
+                    flex: 6,
+                    backgroundColor: const Color(0xFFFE4A49),
+                    foregroundColor: Colors.white,
+                    borderRadius: BorderRadius.only(
+                        topRight: Radius.circular(5.r),
+                        bottomRight: Radius.circular(5.r)),
+                    icon: Icons.delete,
+                    label: 'Delete',
+                  ),
+                ],
+              ),
+              child: ListTile(title: Text(widget.exercise.name)),
+            )),
+      ),
     );
+  }
+
+  void renameExercise(BuildContext context, Exercise exercise) {
+    // TODO: exercise rename function
+    // create new dialog for exercise renaming, receive controller.text as argument, then change exercise name as written bellow
+    // exercise.name = "renamed";
+    // objectbox.exerciseBox.put(exercise);
+  }
+
+  void deleteExercise(BuildContext context, Exercise exercise) {
+    objectbox.exerciseBox.remove(exercise.id);
   }
 }
