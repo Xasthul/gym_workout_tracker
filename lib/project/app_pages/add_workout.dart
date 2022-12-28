@@ -78,11 +78,6 @@ class _ExerciseCardState extends State<ExerciseCard> {
           children: [
             GestureDetector(
               onTap: () async {
-                // final chosenExercise = await Navigator.push(
-                //     context,
-                //     MaterialPageRoute(
-                //       builder: (context) => const Exercises(),
-                //     ));
                 final chosenExercise = await Navigator.of(context).push(_routeToExercises());
                 setState(() {
                   exercise = chosenExercise;

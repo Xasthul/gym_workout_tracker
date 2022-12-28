@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:workout_tracker_prototype/project/classes/exercises_list_view.dart';
+import 'package:workout_tracker_prototype/project/classes/exercises_add.dart';
 
 class Exercises extends StatefulWidget {
   const Exercises({Key? key}) : super(key: key);
@@ -10,21 +11,13 @@ class Exercises extends StatefulWidget {
 }
 
 class _ExercisesState extends State<Exercises> {
-  late TextEditingController _controller;
   final List<String> _exercises = [];
   late _MySearchDelegate _delegate;
 
   @override
   void initState() {
     super.initState();
-    _controller = TextEditingController();
     _delegate = _MySearchDelegate(_exercises);
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
   }
 
   @override
@@ -47,113 +40,11 @@ class _ExercisesState extends State<Exercises> {
               },
               icon: const Icon(Icons.search),
             ),
-            IconButton(
-              tooltip: "Add new exercise",
-              onPressed: () async {
-                final newExerciseName = await openDialog();
-                if (newExerciseName == null || newExerciseName.isEmpty) return;
-                setState(() {
-                  _exercises.add(newExerciseName);
-                });
-              },
-              icon: const Icon(Icons.add),
-            ),
+            const ExercisesAdd(),
           ],
         ),
-        body: SlidableAutoCloseBehavior(
-          closeWhenOpened: true,
-          child: ListView.builder(
-            padding: EdgeInsets.symmetric(vertical: 10.r),
-              itemCount: _exercises.length,
-              itemBuilder: (context, index) {
-                return GestureDetector(
-                  onTap: () => Navigator.pop(context, _exercises[index]),
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 5.r),
-                    child: Card(
-                        elevation: 1,
-                        color: Colors.amber[200],
-                        child: Slidable(
-                          endActionPane: ActionPane(
-                            motion: const DrawerMotion(),
-                            children: [
-                              SlidableAction(
-                                onPressed: doNothing,
-                                flex: 7,
-                                backgroundColor: const Color(0xFF21B7CA),
-                                foregroundColor: Colors.white,
-                                icon: Icons.edit,
-                                label: 'Rename',
-                              ),
-                              SlidableAction(
-                                onPressed: doNothing,
-                                flex: 6,
-                                backgroundColor: const Color(0xFFFE4A49),
-                                foregroundColor: Colors.white,
-                                borderRadius: BorderRadius.only(
-                                    topRight: Radius.circular(5.r),
-                                    bottomRight: Radius.circular(5.r)),
-                                icon: Icons.delete,
-                                label: 'Delete',
-                              ),
-                            ],
-                          ),
-                          child: ListTile(title: Text(_exercises[index])),
-                        )),
-                  ),
-                );
-              }),
-        ));
-  }
-
-  void doNothing(BuildContext context) {}
-
-  // Dialog to add exercise
-  Future<String?> openDialog() => showDialog<String>(
-      context: context,
-      builder: (context) => Dialog(
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20.r)),
-            child: Wrap(
-              children: [
-                Padding(
-                  padding: EdgeInsets.all(24.w),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Text("New exercise", style: TextStyle(fontSize: 18.sp)),
-                      Padding(
-                        padding: EdgeInsets.only(top: 25.h, bottom: 15.h),
-                        child: TextField(
-                          autofocus: true,
-                          controller: _controller,
-                          decoration: InputDecoration(
-                              hintText: "Name of exercise",
-                              contentPadding: EdgeInsets.all(10.w),
-                              isDense: true,
-                              border: OutlineInputBorder(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(10.r)))),
-                          onSubmitted: (_) => submitDialog(),
-                        ),
-                      ),
-                      TextButton(
-                        style: TextButton.styleFrom(
-                            backgroundColor: Colors.amber[300]),
-                        onPressed: submitDialog,
-                        child: const Text("Add",
-                            style: TextStyle(color: Colors.black)),
-                      )
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ));
-
-  void submitDialog() {
-    Navigator.of(context).pop(_controller.text);
-    _controller.clear();
+        body: const ExerciseList(),
+    );
   }
 }
 
