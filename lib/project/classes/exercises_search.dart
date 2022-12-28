@@ -9,21 +9,21 @@ class ExercisesSearch extends StatefulWidget {
 }
 
 class _ExercisesSearchState extends State<ExercisesSearch> {
-  final List<String> _exercises =
-      objectbox.exerciseBox.getAll().map((exercise) => exercise.name).toList();
+  late List<String> _exercises;
   late _MySearchDelegate _delegate;
-
-  @override
-  void initState() {
-    super.initState();
-    _delegate = _MySearchDelegate(_exercises);
-  }
 
   @override
   Widget build(BuildContext context) {
     return IconButton(
       tooltip: "Search",
       onPressed: () async {
+        setState(() {
+          _exercises = objectbox.exerciseBox
+              .getAll()
+              .map((exercise) => exercise.name)
+              .toList();
+          _delegate = _MySearchDelegate(_exercises);
+        });
         final String? selectedExercise =
             await showSearch<String?>(context: context, delegate: _delegate);
         if (selectedExercise != null && _exercises.contains(selectedExercise)) {

@@ -38,7 +38,7 @@ class ObjectBox {
 
   Stream<List<Exercise>> getExercises() {
     final builder = exerciseBox.query()
-      ..order(Exercise_.id, flags: Order.descending);
+      ..order(Exercise_.id); // flags: Order.descending
     return builder.watch(triggerImmediately: true).map((query) => query.find());
   }
 }
