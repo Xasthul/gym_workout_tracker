@@ -5,8 +5,15 @@ import 'package:workout_tracker_prototype/project/app_pages/progress.dart';
 import 'package:workout_tracker_prototype/project/app_pages/loading.dart';
 import 'package:animations/animations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:workout_tracker_prototype/project/database/objectbox.dart';
 
-void main() {
+late ObjectBox objectbox;
+
+Future<void> main() async {
+
+  WidgetsFlutterBinding.ensureInitialized();
+  objectbox = await ObjectBox.create();
+
   runApp(const MyApp());
 }
 
