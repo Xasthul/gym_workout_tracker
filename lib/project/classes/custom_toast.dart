@@ -4,8 +4,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CustomToast extends StatelessWidget {
   final String message;
+  final Color color;
 
-  const CustomToast(this.message, {super.key});
+  const CustomToast(this.message, this.color, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -13,28 +14,19 @@ class CustomToast extends StatelessWidget {
       padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 12.h),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(25.r),
-        color: Colors.greenAccent,
+        color: color,
       ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          const Icon(Icons.check),
-          SizedBox(
-            width: 12.w,
-          ),
-          Text(message),
-        ],
-      ),
+      child: Text(message, style: TextStyle(fontSize: 16.sp)),
     );
   }
 }
 
-void customToast(BuildContext context, String message) {
+void customToast(BuildContext context, String message, Color color) {
   var fToast = FToast();
   fToast.init(context);
   fToast.showToast(
-    child: CustomToast(message),
-    gravity: ToastGravity.BOTTOM,
+    child: CustomToast(message, color),
+    gravity: ToastGravity.TOP,
     toastDuration: const Duration(seconds: 2),
   );
 }

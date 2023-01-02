@@ -60,7 +60,7 @@ class _AddWorkoutState extends State<AddWorkout> {
   }
 
   void removeExercise() {
-    
+
   }
 
   void saveWorkout() async {
@@ -163,7 +163,7 @@ class _AddWorkoutState extends State<AddWorkout> {
       }
 
       if (!mounted) return;
-      customToast(context, "Saved");
+      customToast(context, "Saved", Colors.greenAccent);
     }
 
     exerciseModels.clear();
