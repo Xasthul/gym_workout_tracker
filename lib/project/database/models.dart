@@ -1,5 +1,6 @@
 import 'package:objectbox/objectbox.dart';
 import 'dart:convert';
+import 'package:intl/intl.dart';
 
 @Entity()
 class Exercise {
@@ -7,13 +8,27 @@ class Exercise {
   int id = 0;
 
   String name;
-  Map<DateTime, int>? oneRepMax;
+  Map<String, double>? oneRepMax;
 
   Exercise(this.name);
 
-  void addNewOneRepMax(DateTime dateTime, int weight, int reps) {
-    int newOneRepMax = (weight * (1 + 0.0333 * reps)).toInt(); // formula
-    oneRepMax![dateTime] = newOneRepMax;
+  void addNewOneRepMax(DateTime dateTime, double weight, int reps) {
+    String oneRepMaxDate = DateFormat('dd.MM.yyyy').format(dateTime);
+    double newOneRepMax = double.parse(
+        (weight * (1 + 0.0333 * reps)).toStringAsFixed(2)); // formula
+    oneRepMax![oneRepMaxDate] = newOneRepMax;
+  }
+
+  String? get dbOneRepMaxes =>
+      oneRepMax == null ? null : json.encode(oneRepMax);
+
+  set dbOneRepMaxes(String? value) {
+    if (value == null) {
+      oneRepMax = null;
+    } else {
+      oneRepMax = Map.from(
+          json.decode(value).map((k, v) => MapEntry(k as String, v as double)));
+    }
   }
 }
 
@@ -22,10 +37,10 @@ class Workout {
   @Id()
   int id = 0;
 
-  DateTime dateTimeOfWorkout;
+  String dateOfWorkout;
   Map<String, dynamic>? exercises; // Map<String, Map<String, int>>
 
-  Workout(this.dateTimeOfWorkout);
+  Workout(this.dateOfWorkout);
 
   String? get dbExercises => exercises == null ? null : json.encode(exercises);
 

@@ -5,7 +5,7 @@
   "entities": [
     {
       "id": "1:6386568840996287634",
-      "lastPropertyId": "2:3757790761208177794",
+      "lastPropertyId": "4:7269981471016259837",
       "name": "Exercise",
       "properties": [
         {
@@ -18,13 +18,18 @@
           "id": "2:3757790761208177794",
           "name": "name",
           "type": 9
+        },
+        {
+          "id": "4:7269981471016259837",
+          "name": "dbOneRepMaxes",
+          "type": 9
         }
       ],
       "relations": []
     },
     {
       "id": "2:358228121252865930",
-      "lastPropertyId": "3:7487225057563551767",
+      "lastPropertyId": "4:5581175643911070025",
       "name": "Workout",
       "properties": [
         {
@@ -34,13 +39,13 @@
           "flags": 1
         },
         {
-          "id": "2:3788734462750601504",
-          "name": "dateTimeOfWorkout",
-          "type": 10
-        },
-        {
           "id": "3:7487225057563551767",
           "name": "dbExercises",
+          "type": 9
+        },
+        {
+          "id": "4:5581175643911070025",
+          "name": "dateOfWorkout",
           "type": 9
         }
       ],
@@ -55,7 +60,10 @@
   "modelVersionParserMinimum": 5,
   "retiredEntityUids": [],
   "retiredIndexUids": [],
-  "retiredPropertyUids": [],
+  "retiredPropertyUids": [
+    6226610118720899799,
+    3788734462750601504
+  ],
   "retiredRelationUids": [],
   "version": 1
 }

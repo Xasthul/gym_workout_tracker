@@ -30,11 +30,11 @@ class ObjectBox {
   }
 
   // Exercises
-  int addExercise(String exerciseName) {
-    Exercise newExercise = Exercise(exerciseName);
-    int newExerciseId = exerciseBox.put(newExercise);
-    return newExerciseId;
-  }
+  // int addExercise(String exerciseName) {
+  //   Exercise newExercise = Exercise(exerciseName);
+  //   int newExerciseId = exerciseBox.put(newExercise);
+  //   return newExerciseId;
+  // }
 
   Stream<List<Exercise>> getExercises() {
     final builder = exerciseBox.query()

@@ -82,6 +82,7 @@ class _ExercisesAddState extends State<ExercisesAdd> {
     if (_controller.text.isEmpty) return;
 
     Exercise newExercise = Exercise(_controller.text);
+    newExercise.oneRepMax = {};
     objectbox.exerciseBox.put(newExercise);
 
     Navigator.of(context).pop();
