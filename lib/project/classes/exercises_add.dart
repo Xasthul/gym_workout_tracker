@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:workout_tracker_prototype/main.dart';
 import 'package:workout_tracker_prototype/project/database/models.dart';
 import 'package:workout_tracker_prototype/objectbox.g.dart';
 import 'package:workout_tracker_prototype/project/classes/custom_toast.dart';
+import 'package:workout_tracker_prototype/project/classes/custom_dialog.dart';
 
 class ExercisesAdd extends StatefulWidget {
   const ExercisesAdd({Key? key}) : super(key: key);
@@ -32,56 +32,10 @@ class _ExercisesAddState extends State<ExercisesAdd> {
     return IconButton(
       tooltip: "Add new exercise",
       onPressed: () {
-        openDialog();
+        customDialog(context, "New exercise", "Name of exercise", _controller, "Add", submitDialog);
       },
       icon: const Icon(Icons.add),
     );
-  }
-
-  void openDialog() {
-    showDialog<String>(
-        context: context,
-        builder: (context) => Dialog(
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20.r)),
-              child: Wrap(
-                children: [
-                  Padding(
-                    padding: EdgeInsets.all(24.w),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        Text("New exercise", style: TextStyle(fontSize: 18.sp)),
-                        Padding(
-                          padding: EdgeInsets.only(top: 25.h, bottom: 15.h),
-                          child: TextField(
-                            autofocus: true,
-                            controller: _controller,
-                            decoration: InputDecoration(
-                                hintText: "Name of exercise",
-                                contentPadding: EdgeInsets.all(10.w),
-                                isDense: true,
-                                border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.all(
-                                        Radius.circular(10.r)))),
-                            onSubmitted: (_) => submitDialog(),
-                          ),
-                        ),
-                        TextButton(
-                          style: TextButton.styleFrom(
-                              backgroundColor: Colors.amber[300]),
-                          onPressed: () {
-                            submitDialog();
-                          },
-                          child: const Text("Add",
-                              style: TextStyle(color: Colors.black)),
-                        )
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ));
   }
 
   void submitDialog() {
@@ -94,7 +48,6 @@ class _ExercisesAddState extends State<ExercisesAdd> {
     query.close();
 
     if (foundExercise != null) {
-      Navigator.of(context).pop();
       _controller.clear();
       customToast(context, "Exercise already exists", Colors.redAccent);
       return;
@@ -104,7 +57,6 @@ class _ExercisesAddState extends State<ExercisesAdd> {
     newExercise.oneRepMax = {};
     objectbox.exerciseBox.put(newExercise);
 
-    Navigator.of(context).pop();
     _controller.clear();
   }
 }
