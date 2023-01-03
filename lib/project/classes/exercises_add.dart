@@ -32,7 +32,8 @@ class _ExercisesAddState extends State<ExercisesAdd> {
     return IconButton(
       tooltip: "Add new exercise",
       onPressed: () {
-        customDialog(context, "New exercise", "Name of exercise", _controller, "Add", submitDialog);
+        customDialogTextField(context, "New exercise", "Name of exercise",
+            _controller, "Add", submitDialog);
       },
       icon: const Icon(Icons.add),
     );

@@ -44,7 +44,7 @@ class _ExercisesState extends State<Exercises> {
                     itemCount: snapshot.hasData ? snapshot.data!.length : 0,
                     itemBuilder: _itemBuilder(snapshot.data ?? [])));
           } else {
-            return const Center(child: Text("List is empty."));
+            return const Center(child: Text("List is empty"));
           }
         },
       ),
@@ -62,11 +62,11 @@ class ExerciseCard extends StatefulWidget {
 }
 
 class _ExerciseCardState extends State<ExerciseCard> {
-  late TextEditingController _controller;
+  late TextEditingController _renameController;
 
   @override
   void initState() {
-    _controller = TextEditingController();
+    _renameController = TextEditingController();
     super.initState();
   }
 
@@ -84,15 +84,16 @@ class _ExerciseCardState extends State<ExerciseCard> {
                 motion: const DrawerMotion(),
                 children: [
                   SlidableAction(
-                    onPressed: (item) => customDialog(
+                    onPressed: (item) => customDialogTextField(
                         context,
                         "Rename exercise",
                         "New name",
-                        _controller,
+                        _renameController,
                         "Rename", () {
                       renameExercise(context, widget.exercise);
                     }),
                     flex: 7,
+                    padding: EdgeInsets.zero,
                     backgroundColor: const Color(0xFF21B7CA),
                     foregroundColor: Colors.white,
                     icon: Icons.edit,
@@ -102,6 +103,7 @@ class _ExerciseCardState extends State<ExerciseCard> {
                     onPressed: (item) =>
                         deleteExercise(context, widget.exercise),
                     flex: 6,
+                    padding: EdgeInsets.zero,
                     backgroundColor: const Color(0xFFFE4A49),
                     foregroundColor: Colors.white,
                     borderRadius: BorderRadius.only(
@@ -119,11 +121,12 @@ class _ExerciseCardState extends State<ExerciseCard> {
   }
 
   void renameExercise(BuildContext context, Exercise exercise) {
-    if (_controller.text.isEmpty) return;
+    if (_renameController.text.isEmpty) return;
 
-    exercise.name = _controller.text;
+    exercise.name = _renameController.text;
     objectbox.exerciseBox.put(exercise);
     customToast(context, "Renamed", Colors.greenAccent);
+    _renameController.clear();
   }
 
   void deleteExercise(BuildContext context, Exercise exercise) {

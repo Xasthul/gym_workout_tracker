@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-void customDialog(BuildContext context, String title, String content,
+void customDialogTextField(BuildContext context, String title, String content,
     TextEditingController controller, String action, Function onAction) {
   showDialog<String>(
       context: context,
@@ -43,6 +43,60 @@ void customDialog(BuildContext context, String title, String content,
                         },
                         child: Text(action,
                             style: const TextStyle(color: Colors.black)),
+                      )
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ));
+}
+
+Future<void> customDialogError(BuildContext context, String title,
+    String content, Function onAction) async {
+  showDialog(
+      context: context,
+      builder: (BuildContext context) => Dialog(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20.r)),
+            child: Wrap(
+              children: [
+                Padding(
+                  padding: EdgeInsets.all(24.w),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Icon(Icons.error, size: 40.sp, color: Colors.red[400]),
+                      SizedBox(height: 10.h),
+                      Text(title, style: TextStyle(fontSize: 18.sp)),
+                      Padding(
+                        padding: EdgeInsets.only(top: 25.h, bottom: 15.h),
+                        child: Text(content, style: TextStyle(fontSize: 16.sp)),
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          TextButton(
+                            style: TextButton.styleFrom(
+                                backgroundColor: Colors.amber[300]),
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            child: const Text("Return",
+                                style: TextStyle(color: Colors.black)),
+                          ),
+                          SizedBox(width: 10.w),
+                          TextButton(
+                            style: TextButton.styleFrom(
+                                backgroundColor: Colors.amber[300]),
+                            onPressed: () {
+                              Navigator.pop(context);
+                              onAction();
+                            },
+                            child: const Text("Continue",
+                                style: TextStyle(color: Colors.black)),
+                          )
+                        ],
                       )
                     ],
                   ),

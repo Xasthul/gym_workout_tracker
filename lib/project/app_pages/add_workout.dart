@@ -6,6 +6,7 @@ import 'package:workout_tracker_prototype/project/classes/exercise_input_model.d
 import 'package:workout_tracker_prototype/project/database/models.dart';
 import 'package:workout_tracker_prototype/main.dart';
 import 'package:workout_tracker_prototype/project/classes/custom_toast.dart';
+import 'package:workout_tracker_prototype/project/classes/custom_dialog.dart';
 import 'package:intl/intl.dart';
 
 List<ExerciseInputModel> exerciseModels = [];
@@ -59,117 +60,66 @@ class _AddWorkoutState extends State<AddWorkout> {
     );
   }
 
-  void removeExercise() {
+  void removeExercise() {}
 
-  }
-
-  void saveWorkout() async {
+  void saveWorkout() {
     DateTime currentDate = DateTime.now();
     String workoutDate = DateFormat('dd.MM.yyyy').format(currentDate);
     final List<Exercise> exercisesOneRepMaxes = [];
     bool unfilledFields = false;
     Map<String, dynamic> newWorkoutMap = {};
 
-    for (int i = 0; i < exerciseModels.length; i++) {
-      if (!exerciseModels[i].checkNullValues()) {
-        // check if all fields are filled
-        newWorkoutMap[exerciseModels[i].name!] = {
-          "weight": exerciseModels[i].weight,
-          "reps": exerciseModels[i].reps,
-          "sets": exerciseModels[i].sets
-        };
+    void addWorkoutToDB() {
+      if (newWorkoutMap.isNotEmpty) {
+        Workout newWorkout = Workout(workoutDate);
+        newWorkout.exercises = newWorkoutMap;
+        objectbox.workoutBox.put(newWorkout);
 
+        objectbox.exerciseBox.putMany(exercisesOneRepMaxes);
+
+        if (!mounted) return;
+        customToast(context, "Saved", Colors.greenAccent);
+      }
+
+      exerciseModels.clear();
+      setState(() {
+        _exercises.clear();
+      });
+    }
+
+    for (int i = 0; i < exerciseModels.length; i++) {
+      // check if all fields are filled
+      if (!exerciseModels[i].checkNullValues()) {
         Query<Exercise> query = objectbox.exerciseBox
             .query(Exercise_.name.equals(exerciseModels[i].name!))
             .build();
-        Exercise foundExercise = query.findUnique()!;
+        Exercise? foundExercise = query.findUnique();
         query.close();
 
-        foundExercise.addNewOneRepMax(
-            currentDate, exerciseModels[i].weight!, exerciseModels[i].reps!);
-        exercisesOneRepMaxes.add(foundExercise);
+        // Exercise might be deleted
+        if (foundExercise != null) {
+          foundExercise.addNewOneRepMax(
+              currentDate, exerciseModels[i].weight!, exerciseModels[i].reps!);
+          exercisesOneRepMaxes.add(foundExercise);
+
+          newWorkoutMap[exerciseModels[i].name!] = {
+            "weight": exerciseModels[i].weight,
+            "reps": exerciseModels[i].reps,
+            "sets": exerciseModels[i].sets
+          };
+        }
       } else {
         unfilledFields = true;
         continue;
       }
     }
 
-    bool proceed = true;
     if (unfilledFields) {
-      proceed = await showDialog(
-          context: context,
-          builder: (BuildContext context) => Dialog(
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20.r)),
-                child: Wrap(
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.all(24.w),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Icon(Icons.error,
-                              size: 40.sp, color: Colors.red[400]),
-                          SizedBox(height: 10.h),
-                          Text("You have unfilled fields",
-                              style: TextStyle(fontSize: 18.sp)),
-                          Padding(
-                            padding: EdgeInsets.only(top: 25.h, bottom: 15.h),
-                            child: Text(
-                                "Exercises with empty fields will NOT be saved.",
-                                style: TextStyle(fontSize: 16.sp)),
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              TextButton(
-                                style: TextButton.styleFrom(
-                                    backgroundColor: Colors.amber[300]),
-                                onPressed: () {
-                                  Navigator.pop(context, false);
-                                },
-                                child: const Text("Return",
-                                    style: TextStyle(color: Colors.black)),
-                              ),
-                              SizedBox(width: 10.w),
-                              TextButton(
-                                style: TextButton.styleFrom(
-                                    backgroundColor: Colors.amber[300]),
-                                onPressed: () {
-                                  Navigator.pop(context, true);
-                                },
-                                child: const Text("Continue",
-                                    style: TextStyle(color: Colors.black)),
-                              )
-                            ],
-                          )
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ));
+      customDialogError(context, "You have unfilled fields",
+          "Exercises with empty fields will NOT be saved.", addWorkoutToDB);
+    } else {
+      addWorkoutToDB();
     }
-
-    if (!proceed) return;
-
-    if (newWorkoutMap.isNotEmpty) {
-      Workout newWorkout = Workout(workoutDate);
-      newWorkout.exercises = newWorkoutMap;
-      objectbox.workoutBox.put(newWorkout);
-
-      for (var exercise in exercisesOneRepMaxes) {
-        objectbox.exerciseBox.put(exercise);
-      }
-
-      if (!mounted) return;
-      customToast(context, "Saved", Colors.greenAccent);
-    }
-
-    exerciseModels.clear();
-    setState(() {
-      _exercises.clear();
-    });
   }
 }
 
@@ -239,6 +189,7 @@ class _ExerciseWorkoutCardState extends State<ExerciseWorkoutCard> {
                 SizedBox(
                   width: 80.w,
                   child: TextField(
+                    enableInteractiveSelection: false,
                     controller: _weightController,
                     onChanged: (item) {
                       exerciseInputModel.weight = _weightController.text != ""
@@ -264,6 +215,7 @@ class _ExerciseWorkoutCardState extends State<ExerciseWorkoutCard> {
                 SizedBox(
                   width: 65.w,
                   child: TextField(
+                    enableInteractiveSelection: false,
                     controller: _repsController,
                     onChanged: (item) {
                       exerciseInputModel.reps = _repsController.text != ""
@@ -289,6 +241,7 @@ class _ExerciseWorkoutCardState extends State<ExerciseWorkoutCard> {
                 SizedBox(
                   width: 60.w,
                   child: TextField(
+                    enableInteractiveSelection: false,
                     controller: _setsController,
                     onChanged: (item) {
                       exerciseInputModel.sets = _setsController.text != ""

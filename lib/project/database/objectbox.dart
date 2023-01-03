@@ -20,6 +20,9 @@ class ObjectBox {
     Exercise benchPress = Exercise("Bench Press");
     Exercise deadlift = Exercise("Deadlift");
     Exercise squats = Exercise("Squats");
+    for (var exercise in [benchPress, deadlift, squats]) {
+      exercise.oneRepMax = {};
+    }
 
     exerciseBox.putMany([benchPress, deadlift, squats]);
   }
