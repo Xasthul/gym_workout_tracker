@@ -5,6 +5,8 @@ import 'package:workout_tracker_prototype/project/classes/exercises_search.dart'
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:workout_tracker_prototype/main.dart';
 import 'package:workout_tracker_prototype/project/database/models.dart';
+import 'package:workout_tracker_prototype/project/classes/custom_dialog.dart';
+import 'package:workout_tracker_prototype/project/classes/custom_toast.dart';
 
 class Exercises extends StatefulWidget {
   const Exercises({Key? key}) : super(key: key);
@@ -60,6 +62,14 @@ class ExerciseCard extends StatefulWidget {
 }
 
 class _ExerciseCardState extends State<ExerciseCard> {
+  late TextEditingController _controller;
+
+  @override
+  void initState() {
+    _controller = TextEditingController();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -74,8 +84,14 @@ class _ExerciseCardState extends State<ExerciseCard> {
                 motion: const DrawerMotion(),
                 children: [
                   SlidableAction(
-                    onPressed: (item) =>
-                        renameExercise(context, widget.exercise),
+                    onPressed: (item) => customDialog(
+                        context,
+                        "Rename exercise",
+                        "New name",
+                        _controller,
+                        "Rename", () {
+                      renameExercise(context, widget.exercise);
+                    }),
                     flex: 7,
                     backgroundColor: const Color(0xFF21B7CA),
                     foregroundColor: Colors.white,
@@ -103,10 +119,11 @@ class _ExerciseCardState extends State<ExerciseCard> {
   }
 
   void renameExercise(BuildContext context, Exercise exercise) {
-    // TODO: exercise rename function
-    // create new dialog for exercise renaming, receive controller.text as argument, then change exercise name as written bellow
-    // exercise.name = "renamed";
-    // objectbox.exerciseBox.put(exercise);
+    if (_controller.text.isEmpty) return;
+
+    exercise.name = _controller.text;
+    objectbox.exerciseBox.put(exercise);
+    customToast(context, "Renamed", Colors.greenAccent);
   }
 
   void deleteExercise(BuildContext context, Exercise exercise) {
