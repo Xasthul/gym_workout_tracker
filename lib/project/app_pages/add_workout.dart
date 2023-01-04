@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:workout_tracker_prototype/objectbox.g.dart';
 import 'package:workout_tracker_prototype/project/app_pages/exercises.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -197,6 +198,11 @@ class _ExerciseWorkoutCardState extends State<ExerciseWorkoutCard> {
                           : null;
                     },
                     keyboardType: TextInputType.number,
+                    inputFormatters: [
+                      FilteringTextInputFormatter.allow(
+                          RegExp(r'^\d{1,3}\.?\d{0,2}')),
+                      // Only one dot with maximum two digits after it
+                    ],
                     style: TextStyle(fontSize: 18.sp),
                     textAlign: TextAlign.center,
                     decoration: InputDecoration(
@@ -223,6 +229,11 @@ class _ExerciseWorkoutCardState extends State<ExerciseWorkoutCard> {
                           : null;
                     },
                     keyboardType: TextInputType.number,
+                    inputFormatters: [
+                      FilteringTextInputFormatter.digitsOnly,
+                      LengthLimitingTextInputFormatter(4)
+                    ],
+                    // allow(RegExp(r'[0-9.]'))
                     style: TextStyle(fontSize: 18.sp),
                     textAlign: TextAlign.center,
                     decoration: InputDecoration(
@@ -249,6 +260,10 @@ class _ExerciseWorkoutCardState extends State<ExerciseWorkoutCard> {
                           : null;
                     },
                     keyboardType: TextInputType.number,
+                    inputFormatters: [
+                      FilteringTextInputFormatter.digitsOnly,
+                      LengthLimitingTextInputFormatter(3)
+                    ],
                     style: TextStyle(fontSize: 18.sp),
                     textAlign: TextAlign.center,
                     decoration: InputDecoration(
