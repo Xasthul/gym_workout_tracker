@@ -44,10 +44,26 @@ class _AddWorkoutState extends State<AddWorkout> {
               offset: const Offset(0, 55))
         ],
       ),
-      body: ListView.builder(
-        itemCount: _exercises.length,
-        itemBuilder: (context, index) => _exercises[index],
-      ),
+      body: _exercises.isNotEmpty
+          ? ListView.builder(
+              itemCount: _exercises.length,
+              itemBuilder: (context, index) => _exercises[index],
+            )
+          : Center(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  "Press ",
+                  style: TextStyle(fontSize: 18.sp),
+                ),
+                Icon(Icons.add, size: 28.sp),
+                Text(
+                  " to add exercise",
+                  style: TextStyle(fontSize: 18.sp),
+                ),
+              ],
+            )),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           setState(() {
@@ -61,11 +77,12 @@ class _AddWorkoutState extends State<AddWorkout> {
   }
 
   void removeExercise() {
-    for(var exercise in objectbox.exerciseBox.getAll()) {
+    for (var exercise in objectbox.exerciseBox.getAll()) {
       print("${exercise.id} : ${exercise.name} : ${exercise.oneRepMax}");
     }
-    for(var exercise in objectbox.workoutBox.getAll()) {
-      print("${exercise.id} : ${exercise.dateOfWorkout} : ${exercise.exercises}");
+    for (var exercise in objectbox.workoutBox.getAll()) {
+      print(
+          "${exercise.id} : ${exercise.dateOfWorkout} : ${exercise.exercises}");
     }
   }
 

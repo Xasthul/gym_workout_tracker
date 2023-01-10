@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter/services.dart';
 
 void customDialogTextField(BuildContext context, String title, String content,
     TextEditingController controller, String action, Function onAction) {
@@ -19,6 +20,9 @@ void customDialogTextField(BuildContext context, String title, String content,
                       Padding(
                         padding: EdgeInsets.only(top: 25.h, bottom: 15.h),
                         child: TextField(
+                          inputFormatters: [
+                            LengthLimitingTextInputFormatter(50),
+                          ],
                           autofocus: true,
                           controller: controller,
                           decoration: InputDecoration(

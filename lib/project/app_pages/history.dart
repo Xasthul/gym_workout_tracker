@@ -21,21 +21,9 @@ class _HistoryState extends State<History> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.blue[400],
-        title: Text("Your Workouts", style: TextStyle(fontSize: 21.sp)),
-        //centerTitle: true,
-        actions: <Widget>[
-          IconButton(
-            tooltip: "Search",
-            icon: const Icon(Icons.search),
-            onPressed: () {},
-          ),
-          IconButton(
-            tooltip: "Remove",
-            icon: const Icon(Icons.delete),
-            onPressed: () {},
-          )
-        ],
+        backgroundColor: Colors.amber[600],
+        title: Text("Your Workouts",
+            style: TextStyle(fontSize: 21.sp, color: Colors.brown[600])),
       ),
       body: StreamBuilder<List<Workout>>(
         stream: objectbox.getWorkouts(),
@@ -48,8 +36,8 @@ class _HistoryState extends State<History> {
           } else {
             return Center(
                 child: Text(
-              "No Workouts yet",
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.sp),
+              "Empty",
+              style: TextStyle(fontSize: 18.sp),
             ));
           }
         },
@@ -81,7 +69,7 @@ class _WorkoutCardState extends State<WorkoutCard> {
         child: Column(
           children: [
             Padding(
-              padding: EdgeInsets.only(left: 5.w),
+              padding: EdgeInsets.only(left: 5.w, right: 5.w),
               child: Row(
                 children: [
                   Expanded(
@@ -90,15 +78,39 @@ class _WorkoutCardState extends State<WorkoutCard> {
                               .format(widget.workout.dateOfWorkout),
                           style: TextStyle(
                               fontSize: 20.sp, fontWeight: FontWeight.bold))),
-                  Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(30.r)),
-                      color: Colors.lightBlue[200],
+                  PopupMenuButton(
+                    child: Container(
+                      decoration: BoxDecoration(
+                          color: Colors.amber[300],
+                          borderRadius:
+                              BorderRadius.all(Radius.circular(20.r))),
+                      child: Icon(Icons.more_horiz, size: 26.sp),
                     ),
-                    child: Icon(
-                      Icons.more_horiz,
-                      size: 28.sp,
-                    ),
+                    itemBuilder: (context) => [
+                      PopupMenuItem(
+                        padding: EdgeInsets.symmetric(
+                            vertical: 0.h, horizontal: 10.w),
+                        value: 1,
+                        onTap: () {
+                          objectbox.workoutBox.remove(widget.workout.id);
+                        },
+                        child: SizedBox(
+                          width: 90.w,
+                          child: Row(
+                            children: [
+                              Icon(
+                                Icons.close,
+                                color: Colors.red,
+                                size: 24.sp,
+                              ),
+                              SizedBox(width: 5.w),
+                              Text("Remove", style: TextStyle(fontSize: 16.sp),),
+                            ],
+                          ),
+                        ),
+                      )
+                    ],
+                    // offset: const Offset(0, 30))
                   )
                 ],
               ),
@@ -112,6 +124,10 @@ class _WorkoutCardState extends State<WorkoutCard> {
                   itemCount: widget.workout.exercises.length,
                   itemBuilder: (context, index) {
                     String key = widget.workout.exercises.keys.elementAt(index);
+                    String name = key;
+                    if (name.length > 15) {
+                      name = "${key.substring(0, 15)}..";
+                    }
                     RegExp regex = RegExp(r'([.]*0)(?!.*\d)');
                     String editedWeight = widget
                         .workout.exercises[key]["weight"]
@@ -122,9 +138,10 @@ class _WorkoutCardState extends State<WorkoutCard> {
                         Row(
                           children: [
                             Text(
-                              "${(index + 1).toString()}. $key ",
+                              "${(index + 1).toString()}. $name ",
                               style: TextStyle(fontSize: 20.sp),
                             ),
+                            Spacer(),
                             Text(
                               "${editedWeight}kg "
                               "${widget.workout.exercises[key]["reps"]}x"

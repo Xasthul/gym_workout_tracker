@@ -40,7 +40,7 @@ class ObjectBox {
 
   Stream<List<Workout>> getWorkouts() {
     final builder = workoutBox.query()
-      ..order(Workout_.id); // flags: Order.descending
+      ..order(Workout_.dateOfWorkout, flags: Order.descending); // flags: Order.descending
     return builder.watch(triggerImmediately: true).map((query) => query.find());
   }
 }
