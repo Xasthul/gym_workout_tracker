@@ -32,16 +32,15 @@ class ObjectBox {
     return ObjectBox._create(store);
   }
 
-  // Exercises
-  // int addExercise(String exerciseName) {
-  //   Exercise newExercise = Exercise(exerciseName);
-  //   int newExerciseId = exerciseBox.put(newExercise);
-  //   return newExerciseId;
-  // }
-
   Stream<List<Exercise>> getExercises() {
     final builder = exerciseBox.query()
       ..order(Exercise_.id); // flags: Order.descending
+    return builder.watch(triggerImmediately: true).map((query) => query.find());
+  }
+
+  Stream<List<Workout>> getWorkouts() {
+    final builder = workoutBox.query()
+      ..order(Workout_.id); // flags: Order.descending
     return builder.watch(triggerImmediately: true).map((query) => query.find());
   }
 }

@@ -8,7 +8,6 @@ import 'package:workout_tracker_prototype/project/database/models.dart';
 import 'package:workout_tracker_prototype/main.dart';
 import 'package:workout_tracker_prototype/project/classes/custom_toast.dart';
 import 'package:workout_tracker_prototype/project/classes/custom_dialog.dart';
-import 'package:intl/intl.dart';
 
 List<ExerciseInputModel> exerciseModels = [];
 
@@ -61,18 +60,24 @@ class _AddWorkoutState extends State<AddWorkout> {
     );
   }
 
-  void removeExercise() {}
+  void removeExercise() {
+    for(var exercise in objectbox.exerciseBox.getAll()) {
+      print("${exercise.id} : ${exercise.name} : ${exercise.oneRepMax}");
+    }
+    for(var exercise in objectbox.workoutBox.getAll()) {
+      print("${exercise.id} : ${exercise.dateOfWorkout} : ${exercise.exercises}");
+    }
+  }
 
   void saveWorkout() {
     DateTime currentDate = DateTime.now();
-    String workoutDate = DateFormat('dd.MM.yyyy').format(currentDate);
     final List<Exercise> exercisesOneRepMaxes = [];
     bool unfilledFields = false;
     Map<String, dynamic> newWorkoutMap = {};
 
     void addWorkoutToDB() {
       if (newWorkoutMap.isNotEmpty) {
-        Workout newWorkout = Workout(workoutDate);
+        Workout newWorkout = Workout(currentDate);
         newWorkout.exercises = newWorkoutMap;
         objectbox.workoutBox.put(newWorkout);
 
@@ -233,7 +238,6 @@ class _ExerciseWorkoutCardState extends State<ExerciseWorkoutCard> {
                       FilteringTextInputFormatter.digitsOnly,
                       LengthLimitingTextInputFormatter(4)
                     ],
-                    // allow(RegExp(r'[0-9.]'))
                     style: TextStyle(fontSize: 18.sp),
                     textAlign: TextAlign.center,
                     decoration: InputDecoration(

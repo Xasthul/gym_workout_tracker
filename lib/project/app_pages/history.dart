@@ -1,20 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:intl/intl.dart';     // DateTime currentDate = DateFormat('dd.MM.yyyy').format(DateTime.now()) as DateTime;
-
-//   Map<String, dynamic> workouts =
-//   {"21.12.22" : {
-//     "benchpress" : {"weight" : 55, "sets" : 4, "reps" : 8},
-//     "squats" : {"weight" : 55, "sets" : 4, "reps" : 8},
-//     "deadlift" : {"weight" : 55, "sets" : 4, "reps" : 8}},
-//   "23.12.22" : {
-//     "benchpress" : {"weight" : 55, "sets" : 4, "reps" : 8},
-//     "squats" : {"weight" : 55, "sets" : 4, "reps" : 8},
-//     "deadlift" : {"weight" : 55, "sets" : 4, "reps" : 8}},
-//   "22.12.22" : {
-//     "benchpress" : {"weight" : 55, "sets" : 4, "reps" : 8},
-//     "squats" : {"weight" : 55, "sets" : 4, "reps" : 8},
-//     "deadlift" : {"weight" : 55, "sets" : 4, "reps" : 8}}};
+import 'package:intl/intl.dart';
+import 'package:workout_tracker_prototype/project/database/models.dart'; // DateTime currentDate = DateFormat('dd.MM.yyyy').format(DateTime.now()) as DateTime;
+import 'package:workout_tracker_prototype/main.dart';
 
 class History extends StatefulWidget {
   const History({Key? key}) : super(key: key);
@@ -24,6 +12,11 @@ class History extends StatefulWidget {
 }
 
 class _HistoryState extends State<History> {
+  WorkoutCard Function(BuildContext, int) _itemBuilder(List<Workout> workouts) {
+    return (BuildContext context, int index) =>
+        WorkoutCard(workout: workouts[index]);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -44,21 +37,111 @@ class _HistoryState extends State<History> {
           )
         ],
       ),
-      body: WorkoutContainer(),
+      body: StreamBuilder<List<Workout>>(
+        stream: objectbox.getWorkouts(),
+        builder: (context, snapshot) {
+          if (snapshot.data?.isNotEmpty ?? false) {
+            return ListView.builder(
+                padding: EdgeInsets.symmetric(vertical: 10.r),
+                itemCount: snapshot.hasData ? snapshot.data!.length : 0,
+                itemBuilder: _itemBuilder(snapshot.data ?? []));
+          } else {
+            return Center(
+                child: Text(
+              "No Workouts yet",
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.sp),
+            ));
+          }
+        },
+      ),
     );
   }
 }
 
-class WorkoutContainer extends StatefulWidget {
-  const WorkoutContainer({Key? key}) : super(key: key);
+class WorkoutCard extends StatefulWidget {
+  final workout;
+
+  const WorkoutCard({Key? key, this.workout}) : super(key: key);
 
   @override
-  State<WorkoutContainer> createState() => _WorkoutContainerState();
+  State<WorkoutCard> createState() => _WorkoutCardState();
 }
 
-class _WorkoutContainerState extends State<WorkoutContainer> {
+class _WorkoutCardState extends State<WorkoutCard> {
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Card(
+      elevation: 0,
+      margin: EdgeInsets.symmetric(vertical: 10.h, horizontal: 25.w),
+      shape: RoundedRectangleBorder(
+          side: const BorderSide(color: Colors.grey),
+          borderRadius: BorderRadius.all(Radius.circular(6.r))),
+      child: Padding(
+        padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 15.w),
+        child: Column(
+          children: [
+            Padding(
+              padding: EdgeInsets.only(left: 5.w),
+              child: Row(
+                children: [
+                  Expanded(
+                      child: Text(
+                          DateFormat('EEEE, d MMM.')
+                              .format(widget.workout.dateOfWorkout),
+                          style: TextStyle(
+                              fontSize: 20.sp, fontWeight: FontWeight.bold))),
+                  Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(30.r)),
+                      color: Colors.lightBlue[200],
+                    ),
+                    child: Icon(
+                      Icons.more_horiz,
+                      size: 28.sp,
+                    ),
+                  )
+                ],
+              ),
+            ),
+            SizedBox(height: 10.h),
+            Padding(
+              padding: EdgeInsets.symmetric(vertical: 0.h, horizontal: 10.w),
+              child: ListView.separated(
+                  physics: const NeverScrollableScrollPhysics(),
+                  shrinkWrap: true,
+                  itemCount: widget.workout.exercises.length,
+                  itemBuilder: (context, index) {
+                    String key = widget.workout.exercises.keys.elementAt(index);
+                    RegExp regex = RegExp(r'([.]*0)(?!.*\d)');
+                    String editedWeight = widget
+                        .workout.exercises[key]["weight"]
+                        .toString()
+                        .replaceAll(regex, '');
+                    return Wrap(
+                      children: [
+                        Row(
+                          children: [
+                            Text(
+                              "${(index + 1).toString()}. $key ",
+                              style: TextStyle(fontSize: 20.sp),
+                            ),
+                            Text(
+                              "${editedWeight}kg "
+                              "${widget.workout.exercises[key]["reps"]}x"
+                              "${widget.workout.exercises[key]["sets"]}",
+                              style: TextStyle(fontSize: 20.sp),
+                            ),
+                          ],
+                        )
+                      ],
+                    );
+                  },
+                  separatorBuilder: (BuildContext context, int index) =>
+                      SizedBox(height: 5.h)),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

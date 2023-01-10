@@ -37,7 +37,7 @@ class Workout {
   @Id()
   int id = 0;
 
-  String dateOfWorkout;
+  DateTime dateOfWorkout;
   Map<String, dynamic>? exercises; // Map<String, Map<String, int>>
 
   Workout(this.dateOfWorkout);
