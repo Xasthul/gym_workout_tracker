@@ -139,7 +139,7 @@ class _AddWorkoutState extends State<AddWorkout> {
 
     if (unfilledFields) {
       customDialogError(context, "You have unfilled fields",
-          "Exercises with empty fields will NOT be saved.", addWorkoutToDB);
+          "Exercises with empty fields will NOT be saved.", "Continue", addWorkoutToDB);
     } else {
       addWorkoutToDB();
     }
@@ -222,8 +222,9 @@ class _ExerciseWorkoutCardState extends State<ExerciseWorkoutCard> {
                     keyboardType: TextInputType.number,
                     inputFormatters: [
                       FilteringTextInputFormatter.allow(
-                          RegExp(r'^\d{1,3}\.?\d{0,2}')),
+                          RegExp(r'(^\d{1,3}\.\d{0,2})|(^\d{1,4})')),
                       // Only one dot with maximum two digits after it
+                      // If there is no dot, maximum 4 digits
                     ],
                     style: TextStyle(fontSize: 18.sp),
                     textAlign: TextAlign.center,
@@ -253,7 +254,7 @@ class _ExerciseWorkoutCardState extends State<ExerciseWorkoutCard> {
                     keyboardType: TextInputType.number,
                     inputFormatters: [
                       FilteringTextInputFormatter.digitsOnly,
-                      LengthLimitingTextInputFormatter(4)
+                      LengthLimitingTextInputFormatter(3)
                     ],
                     style: TextStyle(fontSize: 18.sp),
                     textAlign: TextAlign.center,
@@ -283,7 +284,7 @@ class _ExerciseWorkoutCardState extends State<ExerciseWorkoutCard> {
                     keyboardType: TextInputType.number,
                     inputFormatters: [
                       FilteringTextInputFormatter.digitsOnly,
-                      LengthLimitingTextInputFormatter(3)
+                      LengthLimitingTextInputFormatter(2)
                     ],
                     style: TextStyle(fontSize: 18.sp),
                     textAlign: TextAlign.center,

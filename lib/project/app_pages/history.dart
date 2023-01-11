@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
-import 'package:workout_tracker_prototype/project/database/models.dart'; // DateTime currentDate = DateFormat('dd.MM.yyyy').format(DateTime.now()) as DateTime;
+import 'package:workout_tracker_prototype/project/database/models.dart';
 import 'package:workout_tracker_prototype/main.dart';
+import 'package:workout_tracker_prototype/project/classes/custom_dialog.dart';
 
 class History extends StatefulWidget {
   const History({Key? key}) : super(key: key);
@@ -47,9 +48,9 @@ class _HistoryState extends State<History> {
 }
 
 class WorkoutCard extends StatefulWidget {
-  final workout;
+  final Workout workout;
 
-  const WorkoutCard({Key? key, this.workout}) : super(key: key);
+  const WorkoutCard({Key? key, required this.workout}) : super(key: key);
 
   @override
   State<WorkoutCard> createState() => _WorkoutCardState();
@@ -77,14 +78,14 @@ class _WorkoutCardState extends State<WorkoutCard> {
                           DateFormat('EEEE, d MMM.')
                               .format(widget.workout.dateOfWorkout),
                           style: TextStyle(
-                              fontSize: 20.sp, fontWeight: FontWeight.bold))),
+                              fontSize: 18.sp, fontWeight: FontWeight.bold))),
                   PopupMenuButton(
                     child: Container(
                       decoration: BoxDecoration(
                           color: Colors.amber[300],
                           borderRadius:
                               BorderRadius.all(Radius.circular(20.r))),
-                      child: Icon(Icons.more_horiz, size: 26.sp),
+                      child: Icon(Icons.more_horiz, size: 24.sp),
                     ),
                     itemBuilder: (context) => [
                       PopupMenuItem(
@@ -92,25 +93,30 @@ class _WorkoutCardState extends State<WorkoutCard> {
                             vertical: 0.h, horizontal: 10.w),
                         value: 1,
                         onTap: () {
-                          objectbox.workoutBox.remove(widget.workout.id);
+                          Future.delayed(
+                              const Duration(seconds: 0),
+                              () => customDialogError(context, "Remove workout",
+                                  "Are you sure to delete the workout? This action cannot be undone.", "Remove", removeWorkout));
                         },
                         child: SizedBox(
                           width: 90.w,
                           child: Row(
                             children: [
                               Icon(
-                                Icons.close,
+                                Icons.close_outlined,
                                 color: Colors.red,
                                 size: 24.sp,
                               ),
                               SizedBox(width: 5.w),
-                              Text("Remove", style: TextStyle(fontSize: 16.sp),),
+                              Text(
+                                "Remove",
+                                style: TextStyle(fontSize: 16.sp),
+                              ),
                             ],
                           ),
                         ),
                       )
                     ],
-                    // offset: const Offset(0, 30))
                   )
                 ],
               ),
@@ -121,32 +127,44 @@ class _WorkoutCardState extends State<WorkoutCard> {
               child: ListView.separated(
                   physics: const NeverScrollableScrollPhysics(),
                   shrinkWrap: true,
-                  itemCount: widget.workout.exercises.length,
+                  itemCount: widget.workout.exercises!.length,
                   itemBuilder: (context, index) {
-                    String key = widget.workout.exercises.keys.elementAt(index);
+                    String key =
+                        widget.workout.exercises!.keys.elementAt(index);
                     String name = key;
-                    if (name.length > 15) {
-                      name = "${key.substring(0, 15)}..";
-                    }
                     RegExp regex = RegExp(r'([.]*0)(?!.*\d)');
                     String editedWeight = widget
-                        .workout.exercises[key]["weight"]
+                        .workout.exercises![key]["weight"]
                         .toString()
                         .replaceAll(regex, '');
+
+                    const int wholeLineSpace = 24;
+                    int spaceForNumbers = editedWeight.length +
+                        widget.workout.exercises![key]["reps"]
+                            .toString()
+                            .length +
+                        widget.workout.exercises![key]["sets"]
+                            .toString()
+                            .length;
+                    int spaceForName = wholeLineSpace - spaceForNumbers;
+                    if (name.length > spaceForName) {
+                      name = "${key.substring(0, (spaceForName))}..";
+                    }
+
                     return Wrap(
                       children: [
                         Row(
                           children: [
                             Text(
                               "${(index + 1).toString()}. $name ",
-                              style: TextStyle(fontSize: 20.sp),
+                              style: TextStyle(fontSize: 18.sp),
                             ),
-                            Spacer(),
+                            const Spacer(),
                             Text(
                               "${editedWeight}kg "
-                              "${widget.workout.exercises[key]["reps"]}x"
-                              "${widget.workout.exercises[key]["sets"]}",
-                              style: TextStyle(fontSize: 20.sp),
+                              "${widget.workout.exercises![key]["reps"]}x"
+                              "${widget.workout.exercises![key]["sets"]}",
+                              style: TextStyle(fontSize: 18.sp),
                             ),
                           ],
                         )
@@ -160,5 +178,9 @@ class _WorkoutCardState extends State<WorkoutCard> {
         ),
       ),
     );
+  }
+
+  void removeWorkout() {
+    objectbox.workoutBox.remove(widget.workout.id);
   }
 }

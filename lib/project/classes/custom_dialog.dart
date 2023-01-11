@@ -57,7 +57,7 @@ void customDialogTextField(BuildContext context, String title, String content,
 }
 
 Future<void> customDialogError(BuildContext context, String title,
-    String content, Function onAction) async {
+    String content, String action, Function onAction) async {
   showDialog(
       context: context,
       builder: (BuildContext context) => Dialog(
@@ -75,7 +75,7 @@ Future<void> customDialogError(BuildContext context, String title,
                       Text(title, style: TextStyle(fontSize: 18.sp)),
                       Padding(
                         padding: EdgeInsets.only(top: 25.h, bottom: 15.h),
-                        child: Text(content, style: TextStyle(fontSize: 16.sp)),
+                        child: Text(content, textAlign: TextAlign.center, style: TextStyle(fontSize: 16.sp)),
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.end,
@@ -86,7 +86,7 @@ Future<void> customDialogError(BuildContext context, String title,
                             onPressed: () {
                               Navigator.pop(context);
                             },
-                            child: const Text("Return",
+                            child: const Text("Cancel",
                                 style: TextStyle(color: Colors.black)),
                           ),
                           SizedBox(width: 10.w),
@@ -97,8 +97,8 @@ Future<void> customDialogError(BuildContext context, String title,
                               Navigator.pop(context);
                               onAction();
                             },
-                            child: const Text("Continue",
-                                style: TextStyle(color: Colors.black)),
+                            child: Text(action,
+                                style: const TextStyle(color: Colors.black)),
                           )
                         ],
                       )
