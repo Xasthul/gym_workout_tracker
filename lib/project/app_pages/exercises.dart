@@ -75,47 +75,56 @@ class _ExerciseCardState extends State<ExerciseCard> {
     return GestureDetector(
       onTap: () => Navigator.pop(context, widget.exercise.name),
       child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 5.r),
-        child: Card(
-            elevation: 2,
-            color: Colors.amber[200],
-            child: Slidable(
-              endActionPane: ActionPane(
-                motion: const DrawerMotion(),
-                children: [
-                  SlidableAction(
-                    onPressed: (item) => customDialogTextField(
-                        context,
-                        "Rename exercise",
-                        "New name",
-                        _renameController,
-                        "Rename", () {
-                      renameExercise(context, widget.exercise);
-                    }),
-                    flex: 7,
-                    padding: EdgeInsets.zero,
-                    backgroundColor: const Color(0xFF21B7CA),
-                    foregroundColor: Colors.white,
-                    icon: Icons.edit,
-                    label: 'Rename',
-                  ),
-                  SlidableAction(
-                    onPressed: (item) =>
-                        deleteExercise(context, widget.exercise),
-                    flex: 6,
-                    padding: EdgeInsets.zero,
-                    backgroundColor: const Color(0xFFFE4A49),
-                    foregroundColor: Colors.white,
-                    borderRadius: BorderRadius.only(
-                        topRight: Radius.circular(5.r),
-                        bottomRight: Radius.circular(5.r)),
-                    icon: Icons.delete,
-                    label: 'Delete',
-                  ),
-                ],
+        padding: EdgeInsets.symmetric(horizontal: 5.r, vertical: 3.h),
+        child: Material(
+          borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(5.r), bottomLeft: Radius.circular(5.r)),
+          elevation: 2,
+          child: Slidable(
+            endActionPane: ActionPane(
+              motion: const DrawerMotion(),
+              children: [
+                SlidableAction(
+                  onPressed: (item) => customDialogTextField(
+                      context,
+                      "Rename exercise",
+                      "New name",
+                      _renameController,
+                      "Rename", () {
+                    renameExercise(context, widget.exercise);
+                  }),
+                  flex: 7,
+                  padding: EdgeInsets.zero,
+                  backgroundColor: const Color(0xFF21B7CA),
+                  foregroundColor: Colors.white,
+                  icon: Icons.edit,
+                  label: 'Rename',
+                ),
+                SlidableAction(
+                  onPressed: (item) => deleteExercise(context, widget.exercise),
+                  flex: 6,
+                  padding: EdgeInsets.zero,
+                  backgroundColor: const Color(0xFFFE4A49),
+                  foregroundColor: Colors.white,
+                  borderRadius: BorderRadius.only(
+                      topRight: Radius.circular(5.r),
+                      bottomRight: Radius.circular(5.r)),
+                  icon: Icons.delete,
+                  label: 'Delete',
+                ),
+              ],
+            ),
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(5.r),
+                    bottomLeft: Radius.circular(5.r)),
+                color: Colors.amber[200],
               ),
               child: ListTile(title: Text(widget.exercise.name)),
-            )),
+            ),
+          ),
+        ),
       ),
     );
   }
