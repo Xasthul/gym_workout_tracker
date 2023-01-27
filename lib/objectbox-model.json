@@ -50,9 +50,43 @@
         }
       ],
       "relations": []
+    },
+    {
+      "id": "3:4991015634047458519",
+      "lastPropertyId": "5:5000805451375212801",
+      "name": "AddWorkoutExercise",
+      "properties": [
+        {
+          "id": "1:638212841217088183",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:4678751099002773077",
+          "name": "name",
+          "type": 9
+        },
+        {
+          "id": "3:4192563588551734642",
+          "name": "weight",
+          "type": 8
+        },
+        {
+          "id": "4:5812522819254856995",
+          "name": "reps",
+          "type": 6
+        },
+        {
+          "id": "5:5000805451375212801",
+          "name": "sets",
+          "type": 6
+        }
+      ],
+      "relations": []
     }
   ],
-  "lastEntityId": "2:358228121252865930",
+  "lastEntityId": "3:4991015634047458519",
   "lastIndexId": "0:0",
   "lastRelationId": "0:0",
   "lastSequenceId": "0:0",

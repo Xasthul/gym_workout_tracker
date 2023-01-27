@@ -6,10 +6,12 @@ class ObjectBox {
 
   late final Box<Exercise> exerciseBox;
   late final Box<Workout> workoutBox;
+  late final Box<AddWorkoutExercise> addWorkoutExerciseBox;
 
   ObjectBox._create(this.store) {
     exerciseBox = Box<Exercise>(store);
     workoutBox = Box<Workout>(store);
+    addWorkoutExerciseBox = Box<AddWorkoutExercise>(store);
 
     if (exerciseBox.isEmpty()) {
       _putDemoData();
@@ -40,7 +42,13 @@ class ObjectBox {
 
   Stream<List<Workout>> getWorkouts() {
     final builder = workoutBox.query()
-      ..order(Workout_.dateOfWorkout, flags: Order.descending); // flags: Order.descending
+      ..order(Workout_.dateOfWorkout, flags: Order.descending);
+    return builder.watch(triggerImmediately: true).map((query) => query.find());
+  }
+
+  Stream<List<AddWorkoutExercise>> getAddWorkoutExercises() {
+    final builder = addWorkoutExerciseBox.query()
+      ..order(AddWorkoutExercise_.id);
     return builder.watch(triggerImmediately: true).map((query) => query.find());
   }
 }

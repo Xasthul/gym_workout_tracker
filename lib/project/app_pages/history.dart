@@ -95,8 +95,12 @@ class _WorkoutCardState extends State<WorkoutCard> {
                         onTap: () {
                           Future.delayed(
                               const Duration(seconds: 0),
-                              () => customDialogError(context, "Remove workout",
-                                  "Are you sure to delete the workout? This action cannot be undone.", "Remove", removeWorkout));
+                              () => customDialogError(
+                                  context,
+                                  "Remove workout",
+                                  "Are you sure to delete the workout? This action cannot be undone.",
+                                  "Remove",
+                                  removeWorkout));
                         },
                         child: SizedBox(
                           width: 90.w,
@@ -150,7 +154,6 @@ class _WorkoutCardState extends State<WorkoutCard> {
                     if (name.length > spaceForName) {
                       name = "${key.substring(0, (spaceForName))}..";
                     }
-
                     return Wrap(
                       children: [
                         Row(

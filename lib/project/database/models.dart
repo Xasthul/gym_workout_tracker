@@ -54,3 +54,15 @@ class Workout {
     }
   }
 }
+
+@Entity()
+class AddWorkoutExercise {
+  @Id()
+  int id = 0;
+
+  String? name;
+  double? weight;
+  int? reps;
+  int? sets;
+
+}
