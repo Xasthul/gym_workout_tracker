@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:workout_tracker_prototype/project/database/models.dart';
 import 'package:workout_tracker_prototype/main.dart';
 import 'package:workout_tracker_prototype/project/classes/custom_dialog.dart';
+import 'package:workout_tracker_prototype/objectbox.g.dart';
 
 class History extends StatefulWidget {
   const History({Key? key}) : super(key: key);
@@ -13,6 +14,8 @@ class History extends StatefulWidget {
 }
 
 class _HistoryState extends State<History> {
+  TextEditingController searchController = TextEditingController();
+
   WorkoutCard Function(BuildContext, int) _itemBuilder(List<Workout> workouts) {
     return (BuildContext context, int index) =>
         WorkoutCard(workout: workouts[index]);
@@ -23,25 +26,74 @@ class _HistoryState extends State<History> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.amber[600],
-        title: Text("Your Workouts",
-            style: TextStyle(fontSize: 21.sp, color: Colors.brown[600])),
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text("Your Workouts",
+                style: TextStyle(fontSize: 21.sp, color: Colors.brown[600])),
+            SizedBox(
+              width: 150.w,
+              height: 45.h,
+              child: TextField(
+                onChanged: (_) {
+                  setState(() {});
+                },
+                controller: searchController,
+                style: TextStyle(fontSize: 18.sp),
+                decoration: const InputDecoration(
+                    contentPadding: EdgeInsets.only(right: 10),
+                    hintText: "Search",
+                    prefixIcon: Icon(Icons.search),
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(25.0)))),
+              ),
+            ),
+          ],
+        ),
       ),
-      body: StreamBuilder<List<Workout>>(
-        stream: objectbox.getWorkouts(),
-        builder: (context, snapshot) {
-          if (snapshot.data?.isNotEmpty ?? false) {
-            return ListView.builder(
-                padding: EdgeInsets.symmetric(vertical: 10.r),
-                itemCount: snapshot.hasData ? snapshot.data!.length : 0,
-                itemBuilder: _itemBuilder(snapshot.data ?? []));
-          } else {
-            return Center(
-                child: Text(
-              "Empty",
-              style: TextStyle(fontSize: 18.sp),
-            ));
-          }
+      body: GestureDetector(
+        onTap: () {
+          FocusScope.of(context).requestFocus(
+              FocusNode()); // Hide Search keyboard, when click outside
         },
+        child: StreamBuilder<List<Workout>>(
+          stream: objectbox.getWorkouts(),
+          builder: (context, snapshot) {
+            if (searchController.text != "") {
+              Query<Workout> query = objectbox.workoutBox
+                  .query(Workout_.dbExercises.contains(searchController.text))
+                  .order(Workout_.dateOfWorkout, flags: Order.descending)
+                  .build();
+              List<Workout> workouts = query.find();
+              query.close();
+              if (workouts.isNotEmpty) {
+                return ListView.builder(
+                    padding: EdgeInsets.symmetric(vertical: 10.r),
+                    itemCount: workouts.length,
+                    itemBuilder: _itemBuilder(workouts));
+              } else {
+                return Center(
+                    child: Text(
+                  "Empty",
+                  style: TextStyle(fontSize: 18.sp),
+                ));
+              }
+            } else {
+              if (snapshot.data?.isNotEmpty ?? false) {
+                return ListView.builder(
+                    padding: EdgeInsets.symmetric(vertical: 10.r),
+                    itemCount: snapshot.hasData ? snapshot.data!.length : 0,
+                    itemBuilder: _itemBuilder(snapshot.data ?? []));
+              } else {
+                return Center(
+                    child: Text(
+                  "Empty",
+                  style: TextStyle(fontSize: 18.sp),
+                ));
+              }
+            }
+          },
+        ),
       ),
     );
   }
