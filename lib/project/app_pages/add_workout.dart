@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:workout_tracker_prototype/objectbox.g.dart';
-import 'package:workout_tracker_prototype/project/app_pages/exercises.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:workout_tracker_prototype/project/database/models.dart';
 import 'package:workout_tracker_prototype/main.dart';
 import 'package:workout_tracker_prototype/project/classes/custom_toast.dart';
 import 'package:workout_tracker_prototype/project/classes/custom_dialog.dart';
+import 'package:workout_tracker_prototype/project/classes/routes.dart';
 
 class AddWorkout extends StatefulWidget {
   const AddWorkout({Key? key}) : super(key: key);
@@ -216,7 +216,7 @@ class _ExerciseWorkoutCardState extends State<ExerciseWorkoutCard> {
               GestureDetector(
                 onTap: () async {
                   final chosenExercise =
-                      await Navigator.of(context).push(_routeToExercises());
+                      await Navigator.of(context).push(routeToExercises());
                   setState(() {
                     widget.addWorkoutExercise.name = chosenExercise?.name;
                     objectbox.addWorkoutExerciseBox
@@ -351,26 +351,6 @@ class _ExerciseWorkoutCardState extends State<ExerciseWorkoutCard> {
           ),
         ),
       ),
-    );
-  }
-
-  Route _routeToExercises() {
-    return PageRouteBuilder(
-      pageBuilder: (context, animation, secondaryAnimation) =>
-          const Exercises(),
-      transitionsBuilder: (context, animation, secondaryAnimation, child) {
-        const begin = Offset(1.0, 0.0);
-        const end = Offset.zero;
-        const curve = Curves.ease;
-
-        var tween =
-            Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-
-        return SlideTransition(
-          position: animation.drive(tween),
-          child: child,
-        );
-      },
     );
   }
 
