@@ -218,7 +218,7 @@ class _ExerciseWorkoutCardState extends State<ExerciseWorkoutCard> {
                   final chosenExercise =
                       await Navigator.of(context).push(_routeToExercises());
                   setState(() {
-                    widget.addWorkoutExercise.name = chosenExercise;
+                    widget.addWorkoutExercise.name = chosenExercise?.name;
                     objectbox.addWorkoutExerciseBox
                         .put(widget.addWorkoutExercise);
                   });

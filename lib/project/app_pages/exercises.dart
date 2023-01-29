@@ -73,7 +73,7 @@ class _ExerciseCardState extends State<ExerciseCard> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => Navigator.pop(context, widget.exercise.name),
+      onTap: () => Navigator.pop(context, widget.exercise),
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: 5.r, vertical: 3.h),
         child: Material(
