@@ -195,11 +195,8 @@ class _ExerciseWorkoutCardState extends State<ExerciseWorkoutCard> {
       onLongPress: () {
         Future.delayed(
             const Duration(seconds: 0),
-            () => customDialogError(
-                    context,
-                    "Remove exercise",
-                    "Are you sure to delete this exercise?",
-                    "Remove", () {
+            () => customDialogError(context, "Remove exercise",
+                    "Are you sure to delete this exercise?", "Remove", () {
                   removeExercise(widget.addWorkoutExercise.id);
                 }));
       },
