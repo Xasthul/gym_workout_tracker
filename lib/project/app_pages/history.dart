@@ -25,12 +25,10 @@ class _HistoryState extends State<History> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.amber[600],
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text("Your Workouts",
-                style: TextStyle(fontSize: 21.sp, color: Colors.brown[600])),
+            const Text("Your Workouts"),
             SizedBox(
               width: 150.w,
               height: 45.h,
@@ -39,13 +37,18 @@ class _HistoryState extends State<History> {
                   setState(() {});
                 },
                 controller: searchController,
-                style: TextStyle(fontSize: 18.sp),
-                decoration: const InputDecoration(
-                    contentPadding: EdgeInsets.only(right: 10),
+                style: TextStyle(fontSize: 18.sp, color: Colors.brown[600]),
+                cursorColor: Colors.brown[500],
+                decoration: InputDecoration(
+                    contentPadding: const EdgeInsets.only(right: 10),
                     hintText: "Search",
-                    prefixIcon: Icon(Icons.search),
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(25.0)))),
+                    prefixIcon: Icon(Icons.search, color: Colors.brown[600]),
+                    enabledBorder: OutlineInputBorder(
+                        borderSide: const BorderSide(color: Colors.brown),
+                        borderRadius: BorderRadius.all(Radius.circular(25.r))),
+                    focusedBorder: OutlineInputBorder(
+                        borderSide: const BorderSide(color: Colors.brown),
+                        borderRadius: BorderRadius.all(Radius.circular(25.r)))),
               ),
             ),
           ],
@@ -149,27 +152,17 @@ class _WorkoutCardState extends State<WorkoutCard> {
                               const Duration(seconds: 0),
                               () => customDialogError(
                                   context,
-                                  "Remove workout",
+                                  "Delete workout",
                                   "Are you sure to delete the workout? This action cannot be undone.",
-                                  "Remove",
+                                  "Delete",
                                   removeWorkout));
                         },
-                        child: SizedBox(
-                          width: 90.w,
-                          child: Row(
-                            children: [
-                              Icon(
-                                Icons.close_outlined,
-                                color: Colors.red,
-                                size: 24.sp,
-                              ),
-                              SizedBox(width: 5.w),
-                              Text(
-                                "Remove",
-                                style: TextStyle(fontSize: 16.sp),
-                              ),
-                            ],
-                          ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: const [
+                            Icon(Icons.close, color: Colors.red),
+                            Text("Delete"),
+                          ],
                         ),
                       )
                     ],

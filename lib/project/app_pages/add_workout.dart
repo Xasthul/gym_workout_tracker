@@ -26,8 +26,7 @@ class _AddWorkoutState extends State<AddWorkout> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.blue[400],
-        title: Text("Add Workout", style: TextStyle(fontSize: 21.sp)),
+        title: const Text("Add Workout"),
         actions: <Widget>[
           IconButton(
             tooltip: "Save workout",
@@ -39,7 +38,13 @@ class _AddWorkoutState extends State<AddWorkout> {
                     PopupMenuItem(
                       value: 1,
                       onTap: clearWorkout,
-                      child: const Text("Clear workout"),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: const [
+                          Icon(Icons.delete, color: Colors.red),
+                          Text("Clear workout"),
+                        ],
+                      ),
                     )
                   ],
               offset: const Offset(0, 55))
@@ -50,6 +55,7 @@ class _AddWorkoutState extends State<AddWorkout> {
         builder: (context, snapshot) {
           if (snapshot.data?.isNotEmpty ?? false) {
             return ListView.builder(
+                padding: EdgeInsets.symmetric(vertical: 10.r),
                 itemCount: snapshot.hasData ? snapshot.data!.length : 0,
                 itemBuilder: _itemBuilder(snapshot.data ?? []));
           } else {
@@ -195,19 +201,19 @@ class _ExerciseWorkoutCardState extends State<ExerciseWorkoutCard> {
       onLongPress: () {
         Future.delayed(
             const Duration(seconds: 0),
-            () => customDialogError(context, "Remove exercise",
-                    "Are you sure to delete this exercise?", "Remove", () {
+            () => customDialogError(context, "Delete exercise",
+                    "Are you sure to delete this exercise?", "Delete", () {
                   removeExercise(widget.addWorkoutExercise.id);
                 }));
       },
       child: Card(
-        color: Colors.amber[200],
-        elevation: 3,
-        margin: EdgeInsets.symmetric(vertical: 12.5.h, horizontal: 25.w),
+        elevation: 0,
+        margin: EdgeInsets.symmetric(vertical: 8.h, horizontal: 25.w),
         shape: RoundedRectangleBorder(
+            side: const BorderSide(color: Colors.grey),
             borderRadius: BorderRadius.all(Radius.circular(20.r))),
         child: Padding(
-          padding: EdgeInsets.symmetric(vertical: 20.h, horizontal: 32.w),
+          padding: EdgeInsets.symmetric(vertical: 15.h, horizontal: 32.w),
           child: Column(
             children: [
               GestureDetector(
@@ -266,14 +272,7 @@ class _ExerciseWorkoutCardState extends State<ExerciseWorkoutCard> {
                       ],
                       style: TextStyle(fontSize: 18.sp),
                       textAlign: TextAlign.center,
-                      decoration: InputDecoration(
-                          contentPadding: EdgeInsets.symmetric(
-                              vertical: 10.h, horizontal: 10.w),
-                          isDense: true,
-                          labelText: "Weight",
-                          border: OutlineInputBorder(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(10.r)))),
+                      decoration: const InputDecoration(labelText: "Weight"),
                     ),
                   ),
                   SizedBox(width: 10.w),
@@ -299,14 +298,7 @@ class _ExerciseWorkoutCardState extends State<ExerciseWorkoutCard> {
                       ],
                       style: TextStyle(fontSize: 18.sp),
                       textAlign: TextAlign.center,
-                      decoration: InputDecoration(
-                          contentPadding: EdgeInsets.symmetric(
-                              vertical: 10.h, horizontal: 10.w),
-                          isDense: true,
-                          labelText: "Reps",
-                          border: OutlineInputBorder(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(10.r)))),
+                      decoration: const InputDecoration(labelText: "Reps"),
                     ),
                   ),
                   SizedBox(width: 5.w),
@@ -332,14 +324,9 @@ class _ExerciseWorkoutCardState extends State<ExerciseWorkoutCard> {
                       ],
                       style: TextStyle(fontSize: 18.sp),
                       textAlign: TextAlign.center,
-                      decoration: InputDecoration(
-                          contentPadding: EdgeInsets.symmetric(
-                              vertical: 10.h, horizontal: 10.w),
-                          isDense: true,
-                          labelText: "Sets",
-                          border: OutlineInputBorder(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(10.r)))),
+                      decoration: const InputDecoration(
+                        labelText: "Sets",
+                      ),
                     ),
                   ),
                 ],

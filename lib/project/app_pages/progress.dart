@@ -27,8 +27,8 @@ class _ProgressState extends State<Progress> {
         // Enables the trackball
         enable: true,
         lineType: TrackballLineType.none,
-        markerSettings: const TrackballMarkerSettings(
-            markerVisibility: TrackballVisibilityMode.visible),
+        // markerSettings: const TrackballMarkerSettings(
+        //     markerVisibility: TrackballVisibilityMode.visible),
         activationMode: ActivationMode.singleTap,
         hideDelay: 1250,
         tooltipSettings: const InteractiveTooltip(
@@ -46,8 +46,7 @@ class _ProgressState extends State<Progress> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.blue[400],
-        title: Text("Your Progress", style: TextStyle(fontSize: 21.sp)),
+        title: const Text("Your Progress"),
       ),
       body: Column(
         children: [
@@ -76,7 +75,7 @@ class _ProgressState extends State<Progress> {
               padding: EdgeInsets.symmetric(vertical: 15.h, horizontal: 24.w),
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10.r),
-                  border: Border.all(color: Colors.black)),
+                  border: Border.all(color: Colors.grey)),
               child: Row(
                 children: [
                   Expanded(
@@ -102,8 +101,8 @@ class _ProgressState extends State<Progress> {
                           LineSeries<OneRepMaxData, DateTime>(
                             name: "One Rep Max",
                             color: Colors.amber,
-                            // markerSettings:
-                            //     const MarkerSettings(isVisible: true),
+                            markerSettings:
+                                const MarkerSettings(isVisible: true),
                             dataSource: _chartData,
                             xValueMapper: (OneRepMaxData data, _) =>
                                 DateFormat("dd.MM.yyyy").parse(data.date),

@@ -25,13 +25,7 @@ void customDialogTextField(BuildContext context, String title, String content,
                           ],
                           autofocus: true,
                           controller: controller,
-                          decoration: InputDecoration(
-                              hintText: content,
-                              contentPadding: EdgeInsets.all(10.w),
-                              isDense: true,
-                              border: OutlineInputBorder(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(10.r)))),
+                          decoration: InputDecoration(hintText: content),
                           onSubmitted: (_) {
                             onAction();
                             Navigator.of(context).pop();
@@ -46,7 +40,7 @@ void customDialogTextField(BuildContext context, String title, String content,
                           Navigator.of(context).pop();
                         },
                         child: Text(action,
-                            style: const TextStyle(color: Colors.black)),
+                            style: TextStyle(color: Colors.brown[600])),
                       )
                     ],
                   ),
@@ -75,7 +69,9 @@ Future<void> customDialogError(BuildContext context, String title,
                       Text(title, style: TextStyle(fontSize: 18.sp)),
                       Padding(
                         padding: EdgeInsets.only(top: 25.h, bottom: 15.h),
-                        child: Text(content, textAlign: TextAlign.center, style: TextStyle(fontSize: 16.sp)),
+                        child: Text(content,
+                            textAlign: TextAlign.center,
+                            style: TextStyle(fontSize: 16.sp)),
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.end,
@@ -86,8 +82,8 @@ Future<void> customDialogError(BuildContext context, String title,
                             onPressed: () {
                               Navigator.pop(context);
                             },
-                            child: const Text("Cancel",
-                                style: TextStyle(color: Colors.black)),
+                            child: Text("Cancel",
+                                style: TextStyle(color: Colors.brown[600])),
                           ),
                           SizedBox(width: 10.w),
                           TextButton(
@@ -98,7 +94,7 @@ Future<void> customDialogError(BuildContext context, String title,
                               onAction();
                             },
                             child: Text(action,
-                                style: const TextStyle(color: Colors.black)),
+                                style: TextStyle(color: Colors.brown[600])),
                           )
                         ],
                       )
