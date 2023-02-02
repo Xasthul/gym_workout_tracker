@@ -22,10 +22,35 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return ScreenUtilInit(
       designSize: const Size(393.0, 783.0), // 393, 808 | 393, 783
-      builder: (BuildContext context, child) => const MaterialApp(
+      builder: (BuildContext context, child) => MaterialApp(
           title: "Gym Workout Tracker",
           debugShowCheckedModeBanner: false,
-          home: Home()),
+          theme: ThemeData(
+              appBarTheme: AppBarTheme(
+                  color: Colors.amber[600],
+                  iconTheme: IconThemeData(color: Colors.brown[600]),
+                  titleTextStyle:
+                      TextStyle(fontSize: 21.sp, color: Colors.brown[600]),
+                  elevation: 1),
+              floatingActionButtonTheme: FloatingActionButtonThemeData(
+                  backgroundColor: Colors.amber[600],
+                  foregroundColor: Colors.brown[600],
+                  elevation: 3),
+              inputDecorationTheme: InputDecorationTheme(
+                enabledBorder: OutlineInputBorder(
+                    borderSide: const BorderSide(width: 1, color: Colors.grey),
+                    borderRadius: BorderRadius.all(Radius.circular(10.r))),
+                focusedBorder: OutlineInputBorder(
+                    borderSide: const BorderSide(width: 1, color: Colors.grey),
+                    borderRadius: BorderRadius.all(Radius.circular(10.r))),
+                contentPadding:
+                    EdgeInsets.symmetric(vertical: 10.h, horizontal: 10.w),
+                isDense: true,
+                labelStyle: TextStyle(color: Colors.grey[700]),
+              ),
+              textSelectionTheme:
+                  TextSelectionThemeData(cursorColor: Colors.amber[600])),
+          home: const Home()),
     );
   }
 }
@@ -56,20 +81,23 @@ class _HomeState extends State<Home> {
           icon: Icon(Icons.show_chart_outlined), label: 'Progress'),
     ];
 
-    Widget bottomNavBar = BottomNavigationBar(
-      iconSize: 27.sp,
-      selectedFontSize: 16.sp,
-      unselectedFontSize: 14.sp,
-      selectedItemColor: Colors.amber[800],
-      unselectedItemColor: Colors.black87,
-      items: bottomNavBarItems,
-      currentIndex: _currentTabIndex,
-      type: BottomNavigationBarType.fixed,
-      onTap: (int index) {
-        setState(() {
-          _currentTabIndex = index;
-        });
-      },
+    Widget bottomNavBar = Container(
+      decoration: const BoxDecoration(color: Colors.black),
+      child: BottomNavigationBar(
+        iconSize: 27.sp,
+        selectedFontSize: 16.sp,
+        unselectedFontSize: 14.sp,
+        selectedItemColor: Colors.amber[800],
+        unselectedItemColor: Colors.black87,
+        items: bottomNavBarItems,
+        currentIndex: _currentTabIndex,
+        type: BottomNavigationBarType.fixed,
+        onTap: (int index) {
+          setState(() {
+            _currentTabIndex = index;
+          });
+        },
+      ),
     );
     return Scaffold(
       bottomNavigationBar: bottomNavBar,

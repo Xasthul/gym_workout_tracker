@@ -26,8 +26,7 @@ class _ExercisesState extends State<Exercises> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.blue[400],
-        title: Text("Exercises", style: TextStyle(fontSize: 21.sp)),
+        title: const Text("Exercises"),
         actions: const [
           ExercisesSearch(),
           ExercisesAdd(),
@@ -77,9 +76,6 @@ class _ExerciseCardState extends State<ExerciseCard> {
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: 5.r, vertical: 3.h),
         child: Material(
-          borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(5.r), bottomLeft: Radius.circular(5.r)),
-          elevation: 2,
           child: Slidable(
             endActionPane: ActionPane(
               motion: const DrawerMotion(),
@@ -95,7 +91,7 @@ class _ExerciseCardState extends State<ExerciseCard> {
                   }),
                   flex: 7,
                   padding: EdgeInsets.zero,
-                  backgroundColor: const Color(0xFF21B7CA),
+                  backgroundColor: Colors.orange,
                   foregroundColor: Colors.white,
                   icon: Icons.edit,
                   label: 'Rename',
@@ -104,7 +100,7 @@ class _ExerciseCardState extends State<ExerciseCard> {
                   onPressed: (item) => deleteExercise(context, widget.exercise),
                   flex: 6,
                   padding: EdgeInsets.zero,
-                  backgroundColor: const Color(0xFFFE4A49),
+                  backgroundColor: Colors.red,
                   foregroundColor: Colors.white,
                   borderRadius: BorderRadius.only(
                       topRight: Radius.circular(5.r),
@@ -116,11 +112,10 @@ class _ExerciseCardState extends State<ExerciseCard> {
             ),
             child: Container(
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(5.r),
-                    bottomLeft: Radius.circular(5.r)),
-                color: Colors.amber[200],
-              ),
+                  border: Border.all(color: Colors.grey),
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(5.r),
+                      bottomLeft: Radius.circular(5.r))),
               child: ListTile(title: Text(widget.exercise.name)),
             ),
           ),
