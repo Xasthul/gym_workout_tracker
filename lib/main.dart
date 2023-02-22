@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:workout_tracker_prototype/project/app_pages/history.dart';
 import 'package:workout_tracker_prototype/project/app_pages/add_workout.dart';
 import 'package:workout_tracker_prototype/project/app_pages/progress.dart';
-import 'package:workout_tracker_prototype/project/app_pages/loading.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:workout_tracker_prototype/project/database/objectbox.dart';
 
