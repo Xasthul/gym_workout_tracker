@@ -24,3 +24,7 @@ Run the following commands from your terminal:
     </tr>
   </tbody>
 </table>
+
+## LICENSE
+
+Gym Workout Tracker is [MIT-licensed](https://github.com/Xasthul/gym_workout_tracker/blob/master/LICENSE).
