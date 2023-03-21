@@ -64,8 +64,8 @@ class _MySearchDelegate extends SearchDelegate<String?> {
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    final Iterable<String> suggestions =
-        _exercises.where((word) => word.startsWith(query));
+    final Iterable<String> suggestions = _exercises.where(
+        (exercise) => exercise.toUpperCase().contains(query.toUpperCase()));
 
     return _SuggestionList(
       query: query,
@@ -113,18 +113,9 @@ class _SuggestionList extends StatelessWidget {
       itemBuilder: (BuildContext context, int i) {
         final String suggestion = suggestions[i];
         return ListTile(
-          // Highlight the substring that matched the query.
-          title: RichText(
-            text: TextSpan(
-              text: suggestion.substring(0, query.length),
-              style: textTheme?.copyWith(fontWeight: FontWeight.bold),
-              children: <TextSpan>[
-                TextSpan(
-                  text: suggestion.substring(query.length),
-                  style: textTheme,
-                ),
-              ],
-            ),
+          title: Text(
+            suggestion,
+            style: textTheme,
           ),
           onTap: () {
             onSelected(suggestion);
