@@ -234,9 +234,11 @@ class _WorkoutCardState extends State<WorkoutCard> {
           objectbox.exerciseBox.query(Exercise_.name.equals(key)).build();
       Exercise? exercise = query.findUnique();
       query.close();
-      exercise!.oneRepMax!.remove(
-          DateFormat('dd.MM.yyyy').format(widget.workout.dateOfWorkout));
-      objectbox.exerciseBox.put(exercise);
+      if (exercise != null) {
+        exercise.oneRepMax!.remove(
+            DateFormat('dd.MM.yyyy').format(widget.workout.dateOfWorkout));
+        objectbox.exerciseBox.put(exercise);
+      }
     });
 
     objectbox.workoutBox.remove(widget.workout.id);
